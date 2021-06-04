@@ -1,5 +1,5 @@
 # CANFDuino
-Steps for installing and testing CANFDuino support to the Arduino IDE
+Steps for installing and testing CANFDuino support for the Arduino IDE, running and testing your first CAN sketch:
 
 Step 1. - Download the CANFDuino folder
 
