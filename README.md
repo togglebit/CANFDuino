@@ -3,7 +3,7 @@ Steps for installing and testing CANFDuino support for the Arduino IDE, running 
 
 Step 1. - Download the CANFDuino folder zipped in this reporsitory.
 
-Step 2. - Close the Arduino IDE if you have it open. Unzip the folder and copy the whole folder to your local arduino hardware folder. The path for this hardware folder is: C:\Users\YOUR USERNAME\Documents\Arduino\hardware. The whole folder should be pasted directly into theh hardware folder creating: C:\Users\YOUR USERNAME\Documents\Arduino\hardware\CANFDuino.
+Step 2. - Close the Arduino IDE if you have it open. Unzip the folder and copy the whole folder to your local arduino hardware folder. The path for this hardware folder is: C:\Users\YOUR USERNAME\Documents\Arduino\hardware. The whole folder should be pasted directly into the hardware folder creating: C:\Users\YOUR USERNAME\Documents\Arduino\hardware\CANFDuino.
 
 Step 3. - Open the Arduino IDE, Go to the "Tools->Board->CANFDuino" to select the CANFDuino board as your target board.
 
@@ -19,5 +19,5 @@ Step 8. - Go to Sketch->Upload. After compiling the IDE will send a signal to th
 
 Step 9. - Go to Tools->Serial Monitor, note that this will also cause entry into bootloader for about 4-5 seconds before the sketch runs (for permanant code/bootloader bypass there is a jumper on the PCB).
 
-Step 10. - See diagnostic printout in the comms window indating pass/fail of testing. Typically the cause of failure is improper wiring or no termination resistor.
+Step 10. - See diagnostic printout in the comms window indicating pass/fail of testing. Typically the cause of failure is improper wiring or no termination resistor.
 
