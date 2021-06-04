@@ -7,7 +7,7 @@ Step 2. - Close the Arduino IDE if you have it open. Unzip the folder and copy t
 
 Step 3. - Open the Arduino IDE, Go to the "Tool->Board->CANFDuino" to select the CANFDuino board as your target board.
 
-Step 4. - Go to File->Examples->CANFDuino->CANFDuino_Test500Kb.ino
+Step 4. - Go to File->Examples->CANFDuino->CANFDuino_Test500Kb.ino (have a look at all the other examples as well)
 
 Step 5. - Wire the DB9 connectors or 2pin headers on the PCB to connect CAN0 to CAN1. CAN0 High->CAN1 High, CAN1 Low->CAN1 Low.
 
