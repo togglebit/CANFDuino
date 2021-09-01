@@ -1,6 +1,6 @@
 # CANFDuino
 Steps for installing and testing CANFDuino support for the Arduino IDE, running and testing your first CAN sketch:
-Note this content can also be found here (https://togglebit.net/getting-started-with-canfduino/)
+Note this content can also be found here https://togglebit.net/getting-started-with-canfduino/
 Hookup Guide: https://togglebit.net/canfduino-hookup-guide/
 
 Step 1. - Download the CANFDuino folder zipped in this repository.
