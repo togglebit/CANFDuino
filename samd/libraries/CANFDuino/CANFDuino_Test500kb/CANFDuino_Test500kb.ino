@@ -1,0 +1,136 @@
+#include <CAN_CANFD.h>
+#include <compiler.h>
+#include <mcan.h>
+#include <mcan_helper.h>
+#include <typedef.h>
+
+#include "CAN_CANFD.h"
+
+
+cCAN_CANFD CanPort0(0, _500K, _500K, MCAN_MODE_CAN);
+cCAN_CANFD CanPort1(1, _500K, _500K, MCAN_MODE_CAN);
+cCANTXFrame tx1;
+cCANTXFrame tx2;
+BOOL bit,passFail;
+UINT32 count, prevCount, ticks, uSecs, prevRxCtr0,prevRxCtr1;
+UINT8 i, x;
+
+// the setup function runs once when you press reset or power the board
+void setup() 
+    {
+    // initialize digital pin LED_BUILTIN as an output.
+    pinMode(28, OUTPUT);
+    
+    //enable CAN0 and CAN1 transcievers
+    pinMode(27, OUTPUT);
+    digitalWrite(27, LOW); 
+    
+    Serial.begin(115200);
+    Serial.println("system reset");
+
+    //set TX frame to 0x100
+    tx1.id  = 0x100;
+    tx1.len = 8;
+    tx1.data[0] = 0xFE;
+    CanPort0.addTxMessage(&tx1);
+                                                                            
+    //set TX frame to 0x200
+    tx2.id  = 0x200;
+    tx2.len = 8;
+    tx2.data[0] = 0x55;
+    CanPort1.addTxMessage(&tx2);
+    
+    //start CAN hardware
+    CanPort0.Initialize();
+    CanPort0.setFiltRxAll();
+
+    //start CAN hardware
+    CanPort1.Initialize();
+    CanPort1.setFiltRxAll();
+
+    }
+
+// the loop function runs over and over again forever
+void loop() 
+{
+
+while (1)
+        {
+         //poll queue on RxMessages
+         CanPort0.RxMsgs();
+         CanPort1.RxMsgs();
+
+         //sample clock to determine elapsed number of microseconds
+         count = micros();
+         //  micro's elapsed compensate for rollover
+         ticks = (prevCount < count) ? (count - prevCount) : (0xFFFFFFFF - prevCount) + count; 
+         //capture new previous count
+         prevCount = count;
+         
+         //calculate total uSecs
+         uSecs += ticks;
+
+        //send CAN Messages every 100mS
+        if (uSecs >= 100000)
+            {
+               uSecs = 0;
+               CanPort0.TxMsgs(ALL_MSGS);
+               CanPort1.TxMsgs(ALL_MSGS);
+               //toggle LED
+               bit = !bit;
+               digitalWrite(28, bit ? LOW : HIGH);                
+            }
+        
+        //set pass flag
+        passFail = true;
+         //first check to see if CAN port 0 is recieving data from port 1
+        if(CanPort0.rxCntr != prevRxCtr0)
+        {
+            Serial.println("CAN0 is Receiving Data from CAN1,"); 
+        }else
+        {
+            Serial.println("CAN0 is NOT Receiving Data from CAN1,"); 
+            
+            //indicate test failed
+            passFail =  false;
+        }
+        //capture counter
+        prevRxCtr0 = CanPort0.rxCntr;
+        
+       //first check to see if CAN port 1 is recieving data from port 0
+        if(CanPort1.rxCntr != prevRxCtr1)
+        {
+            Serial.println("CAN1 is Receiving Data from CAN0,"); 
+        }else
+        {
+           Serial.println("CAN1 is NOT Receiving Data from CAN0,"); 
+         
+          //indicate test failed
+           passFail =  false;
+        }
+       //capture counter
+        prevRxCtr1 = CanPort1.rxCntr;
+
+
+        Serial.print("CAN0 RxCtr "); 
+        Serial.println(CanPort0.rxCntr,DEC); 
+        
+        Serial.print("CAN1 RxCtr "); 
+        Serial.println(CanPort1.rxCntr,DEC); 
+
+        //indicate if board has passed or failed construction
+        if(passFail)
+        {
+            Serial.println("The CANFDunio has passed testing!"); 
+            Serial.println("///////////////////////////////////////////////////////////////////////////////"); 
+        }else
+        {
+            Serial.println("The CANFDunio has failed testing. Here are some things to check: "); 
+            Serial.println(" - install jumper on at least one termination resistor"); 
+            Serial.println(" - make sure wiring is CAN0 H -> CAN1 H, CAN0 L -> CAN1 L, GND -> GND"); 
+            Serial.println("///////////////////////////////////////////////////////////////////////////////"); 
+        }
+
+        delay(1000);
+        }
+}

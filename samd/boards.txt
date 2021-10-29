@@ -1,0 +1,55 @@
+# Copyright (c) 2014-2017 Arduino LLC.  All right reserved.
+#
+# This library is free software; you can redistribute it and/or
+# modify it under the terms of the GNU Lesser General Public
+# License as published by the Free Software Foundation; either
+# version 2.1 of the License, or (at your option) any later version.
+#
+# This library is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+# See the GNU Lesser General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public
+# License along with this library; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+
+
+# CANFDUINO
+CANFDuino.name=CANFDuino
+CANFDuino.vid.0=0x0403
+CANFDuino.pid.0=0x6015
+CANFDuino.vid.1=0x10C4
+CANFDuino.pid.1=0xEA60
+CANFDuino.build.usb_manufacturer="Togglebit"
+CANFDuino.build.board=SAMD_ZERO
+CANFDuino.build.core=arduino
+CANFDuino.build.variant=CANFDuino
+CANFDuino.build.variant_system_lib=
+CANFDuino.build.vid=0x16D0
+CANFDuino.upload.protocol=sam-ba
+CANFDuino.bootloader.tool=arduino:openocd
+CANFDuino.build.floatconfig=FLOAT_BOTH_DOUBLES_ONLY
+CANFDuino.build.buildconfig=CONFIG_H_DISABLED
+CANFDuino.build.clockconfig=CLOCKCONFIG_INTERNAL
+CANFDuino.build.timerconfig=TIMER_732Hz
+CANFDuino.upload.maximum_size=253952
+CANFDuino.upload.native_usb=false
+CANFDuino.build.mcu=cortex-m0plus
+CANFDuino.build.mathlib=arm_cortexM0l_math
+CANFDuino.build.f_cpu=48000000L
+CANFDuino.build.usb_product="CANFDuino"
+CANFDuino.build.extra_flags=-D__SAMC21G18A__ -DARM_MATH_CM0PLUS
+CANFDuino.build.ldscript=flash_256KB.ld
+CANFDuino.build.openocdscript=openocd_scripts/SAMC21G18A.cfg
+CANFDuino.build.bootloader_size=__8KB_BOOTLOADER__
+CANFDuino.build.ldscript_path=linker_scripts/gcc/8KB_Bootloader
+CANFDuino.upload.tool=CANFDuino:bossac
+CANFDuino.upload.use_1200bps_touch=true
+CANFDuino.upload.wait_for_upload_port=true
+CANFDuino.build.serialcom_uart=THREE_UART
+CANFDuino.build.serialcom_wire=ONE_WIRE
+CANFDuino.build.serialcom_spi=ONE_SPI
+CANFDuino.build.usbcom=USB_DISABLED
+CANFDuino.build.pid=0x0856
+

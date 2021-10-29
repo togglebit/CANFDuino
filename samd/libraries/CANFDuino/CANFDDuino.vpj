@@ -1,0 +1,24 @@
+[GLOBAL]
+MACRO=\n
+[COMPILER.C:\Users\Togglebit\Documents\Arduino\hardware\CANFDuino\samd\libraries\CANFDuino\CANFDDuino.vpj]
+compile=copts: concur|capture|menu: Compile:&Compilecmd: otheropts: 
+make=copts: concur|capture|menu: Build:&Buildcmd: otheropts: 
+rebuild=copts: concur|capture|menu: Rebuild:&Rebuildcmd: otheropts: 
+debug=copts: |menu: Debug:&Debugcmd: otheropts: 
+execute=copts: |menu: Execute:E&xecutecmd: otheropts: 
+user1=copts: |hide|menu: User 1:User 1cmd: otheropts: 
+user2=copts: |hide|menu: User 2:User 2cmd: otheropts: 
+includedirs=
+reffile=
+[FILES.]
+[ASSOCIATION]
+[FILES]
+CAN_CANFD.cpp
+CAN_CANFD.h
+compiler.h
+mcan.c
+mcan.h
+mcan_helper.h
+OBD2.cpp
+OBD2.h
+typedef.h
