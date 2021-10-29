@@ -3,9 +3,9 @@ Steps for installing and testing CANFDuino support for the Arduino IDE, running 
 Note this content can also be found here https://togglebit.net/getting-started-with-canfduino/
 Hookup Guide: https://togglebit.net/canfduino-hookup-guide/
 
-Step 1. - Download the CANFDuino folder zipped in this repository.
+Step 1. - Download the entie codebase, un-zip it. Rename "CANFDuino-master" to "CANFDuino".
 
-Step 2. - Close the Arduino IDE if you have it open. Unzip the folder and copy the whole folder to your local arduino hardware folder. The path for this hardware folder is: C:\Users\YOUR USERNAME\Documents\Arduino\hardware. The whole folder should be pasted directly into the hardware folder creating: C:\Users\YOUR USERNAME\Documents\Arduino\hardware\CANFDuino. If you do not have a hardware folder, create one and place CANFDuino folder inside of it.
+Step 2. - Close the Arduino IDE if you have it open. Copy the whole "CANFDuino" folder to your local arduino hardware folder. The path for this hardware folder is: C:\Users\YOUR USERNAME\Documents\Arduino\hardware. The whole folder should be pasted directly into the hardware folder creating: C:\Users\YOUR USERNAME\Documents\Arduino\hardware\CANFDuino. If you do not have a hardware folder, create one and place CANFDuino folder inside of it.
 
 Step 3. - Open the Arduino IDE, Go to the "Tools->Board->CANFDuino" to select the CANFDuino board as your target board.
 
