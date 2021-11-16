@@ -9,6 +9,7 @@
 #include <mcan_helper.h>
 #include <typedef.h>
 #include <SD.h>
+#include <FlashAsEEPROM.h>
 
 
 //********* Tested with the following terminal programs ***************
@@ -39,6 +40,20 @@ cCAN_CANFD CanPort0(0,_500K,_500K,MCAN_MODE_CAN);
 cCAN_CANFD CanPort1(1,_500K,_500K,MCAN_MODE_CAN);
 
 UINT8 i, x, PortsOn;
+
+typedef struct
+{
+    UINT8  enabled; 
+    UINT8  baudRate; 
+    UINT8  FDbaudRate; 
+    UINT32 lowerID; 
+    UINT32 upperID; 
+
+}SETTINGS;
+
+//flash CAN settings
+SETTINGS CANSet[2];
+
 
 typedef struct
 {
@@ -130,6 +145,99 @@ public:
     }
 };
 
+void storeSettings()
+{
+    UINT8 memIdx = 0;
+    
+       //store both CANPorts to EEPROM
+    for(i=0; i<2; i++)
+    {
+     EEPROM.write(memIdx++,CANSet[i].enabled);
+     EEPROM.write(memIdx++,CANSet[i].baudRate);
+     EEPROM.write(memIdx++,CANSet[i].FDbaudRate);
+     EEPROM.write(memIdx++,(UINT8)(CANSet[i].lowerID  & 0x000000FF));
+     EEPROM.write(memIdx++,(UINT8)((CANSet[i].lowerID & 0x0000FF00) >> 8));
+     EEPROM.write(memIdx++,(UINT8)((CANSet[i].lowerID & 0x00FF0000) >> 16));
+     EEPROM.write(memIdx++,(UINT8)((CANSet[i].lowerID & 0xFF000000) >> 24));
+    
+     EEPROM.write(memIdx++,(UINT8)(CANSet[i].upperID  & 0x000000FF));
+     EEPROM.write(memIdx++,(UINT8)((CANSet[i].upperID & 0x0000FF00) >> 8));
+     EEPROM.write(memIdx++,(UINT8)((CANSet[i].upperID & 0x00FF0000) >> 16));
+     EEPROM.write(memIdx++,(UINT8)((CANSet[i].upperID & 0xFF000000) >> 24));
+    }
+    //write it all
+    EEPROM.commit();
+}
+
+bool ReadSettings()
+{
+    bool retVal = true;
+    UINT8 memIdx = 0;
+
+    if(EEPROM.isValid())
+    {
+        //read both CANPorts out of EEPROM
+        for(i=0; i<2; i++)
+        {
+            CANSet[i].enabled    = EEPROM.read(memIdx++);
+            CANSet[i].baudRate   = EEPROM.read(memIdx++);
+            CANSet[i].FDbaudRate = EEPROM.read(memIdx++);
+            CANSet[i].lowerID    = (EEPROM.read(memIdx++) & 0x000000FF); 
+            CANSet[i].lowerID   |= (UINT32)(EEPROM.read(memIdx++) << 8); 
+            CANSet[i].lowerID   |= (UINT32)(EEPROM.read(memIdx++) << 16); 
+            CANSet[i].lowerID   |= (UINT32)(EEPROM.read(memIdx++) << 24); 
+            
+            CANSet[i].upperID    = (EEPROM.read(memIdx++) & 0x000000FF); 
+            CANSet[i].upperID   |= (UINT32)(EEPROM.read(memIdx++) << 8); 
+            CANSet[i].upperID   |= (UINT32)(EEPROM.read(memIdx++) << 16); 
+            CANSet[i].upperID   |= (UINT32)(EEPROM.read(memIdx++) << 24); 
+        }
+
+    }else{
+            //message to the screen, reset
+            Serial.println("Flash EEPROM is empty, no settings present. Please enter new settings! Now resetting.");
+            delay(2000);
+            CLEAR_SCREEN;
+            retVal = false;
+         }
+    return(retVal);
+}                          
+
+bool ApplySettings()
+{
+    bool retVal = true;
+
+    retVal = ReadSettings();
+                                    
+
+    switch(CANSet[0].enabled)
+    {
+      case 0:
+        PortsOn = 0;
+        setBaudRates(0);
+        setFilters(0, CANSet[0].lowerID, CANSet[0].upperID);
+        break;
+
+      case 1:
+        PortsOn = 1;
+        setBaudRates(1);
+        setFilters(1, CANSet[1].lowerID, CANSet[1].upperID);
+        break;
+
+      case 2:
+        PortsOn = 2;
+        setBaudRates(0);
+        setFilters(0, CANSet[0].lowerID, CANSet[0].upperID);
+        
+        setBaudRates(1);
+        setFilters(1, CANSet[1].lowerID, CANSet[1].upperID);        
+      break;
+    };
+
+    return(retVal);
+}                          
+
+
 
 String ShowMenu(String *str)
 {
@@ -174,6 +282,41 @@ UINT32 hexStrToDec(char *s)
     return x;
 }
 
+void setFilters(UINT8 portNum, UINT32 rngLo, UINT32 rngHi)
+{
+
+    if(rngLo == 0xFFFFFFFF)
+    {
+        //no ID filtering, accept all messages
+        if (portNum)
+        {
+            CanPort1.setFiltRxAll();
+        } else
+        {
+            CanPort0.setFiltRxAll();
+        }
+
+        Serial.println(String("Port ") + portNum + String(" set to accept all ID's"));
+
+    }else{
+
+        //id filtering set
+        if (portNum)
+        {
+            //set filter ranges
+            CanPort1.setFiltRxRange(rngLo,rngHi & 0x1FFFFFFF);
+        } else
+        {
+            CanPort0.setFiltRxRange(rngLo,rngHi & 0x1FFFFFFF); 
+        }
+
+
+        Serial.print(String("Port ") + String(portNum) + String(" set to accept ID's 0x")); Serial.print(rngLo,HEX); Serial.print(" to 0x"); Serial.println(rngHi,HEX);
+    }
+
+    delay(2000);
+}
+
 void CAN_Filters(UINT8 portNum)
 {
 
@@ -187,18 +330,12 @@ void CAN_Filters(UINT8 portNum)
 
     if (response1 == "ALL")
     {
-        //no ID filtering, accept all messages
-        if (portNum)
-        {
-            CanPort1.setFiltRxAll();
-        } else
-        {
-            CanPort0.setFiltRxAll();
-        }
-
-        Serial.println(port + String(" set to accept all ID's"));
-
-        delay(1000);
+       //no ID filtering, accept all messages
+       setFilters(portNum,0xFFFFFFFF,0xFFFFFFFF);       
+       
+       //set settings
+       CANSet[portNum].lowerID = 0xFFFFFFFF;
+        
 
     } else
     {
@@ -210,38 +347,49 @@ void CAN_Filters(UINT8 portNum)
         //convert ascii hex numbers and letters to decimal
         rngLo = hexStrToDec(&response1[0]);
         rngHi = hexStrToDec(&response2[0]);
-
-        //id filtering set
-        if (portNum)
-        {
-            //set filter ranges
-            CanPort1.setFiltRxRange(rngLo,rngHi & 0x1FFFFFFF);
-        } else
-        {
-            CanPort0.setFiltRxRange(rngLo,rngHi & 0x1FFFFFFF); 
-        }
-
-
-        Serial.println(port + String(" set to accept ID's 0x") + response1 + String(" to 0x") + response2);
-
-        delay(1000);
+        
+        //set settings
+        CANSet[portNum].lowerID = rngLo;
+        CANSet[portNum].upperID = rngHi;
+            
+        //set filters
+        setFilters(portNum,rngLo,rngHi);
 
     }
 
 
 }
 
-void CAN_FDBaudRate(UINT8 portNum, CAN_BAUD_RATE stdBaud)
+void setBaudRates(UINT8 portNum)
 {
+    CAN_BAUD_RATE fdBaud, stdBaud;
 
-    CAN_BAUD_RATE fdBaud;
-    String response,question, port;
-    port =  portNum ==0 ? String("CAN 0") : String("CAN 1");
-    question =  port + String(" CANFD BaudRate (number then enter): 0 - NONE/OFF   1 - 5M   2 - 1M   3 - 500k: ");
+    switch (CANSet[portNum].baudRate)
+    {
+    case 0:
+        stdBaud = (CAN_BAUD_RATE)0;
+        break;
 
-    response = ShowMenu(&question);    
+    case 1:
+        stdBaud =   _1M; 
+        break;    
 
-    switch (response.toInt())
+    case 2:     
+        stdBaud =   _500K; 
+        break;    
+
+    case 3:
+        stdBaud =   _250K; 
+        break;
+
+    case 4:
+    default:
+        stdBaud =   _125K; 
+        break;
+
+    };
+
+    switch (CANSet[portNum].FDbaudRate)
     {
     case 0:
         fdBaud =    (CAN_BAUD_RATE)0; 
@@ -267,23 +415,36 @@ void CAN_FDBaudRate(UINT8 portNum, CAN_BAUD_RATE stdBaud)
         //config std and fd baud rates
         CanPort0.setBaud(stdBaud,fdBaud > 0 ? fdBaud:stdBaud, fdBaud > 0 ? MCAN_MODE_EXT_LEN_DUAL_RATE:MCAN_MODE_CAN );
         CanPort0.Initialize();
-        response = String("CAN Port 0 Initialized to Standard CAN baud ") + String(stdBaud) + String(" FD baud ") + String(fdBaud);  
-        Serial.println(response);
+        Serial.println(String("CAN Port 0 Initialized to Standard CAN baud ") + String(stdBaud) + String(" FD baud ") + String(fdBaud));  
         delay(2000);
-        CAN_Filters(portNum);
 
     } else
     {
 
         CanPort1.setBaud(stdBaud,fdBaud > 0 ? fdBaud:stdBaud, fdBaud > 0 ? MCAN_MODE_EXT_LEN_DUAL_RATE:MCAN_MODE_CAN );
         CanPort1.Initialize();
-        response = String("CAN Port 1 Initialized to Standard CAN baud ") + String(stdBaud) + String(" FD baud ") + String(fdBaud);  
-        Serial.println(response);
+        Serial.println(String("CAN Port 1 Initialized to Standard CAN baud ") + String(stdBaud) + String(" FD baud ") + String(fdBaud));  
         delay(2000);
-        CAN_Filters(portNum);
 
     }
+}
 
+void CAN_FDBaudRate(UINT8 portNum)
+{
+
+    CAN_BAUD_RATE fdBaud;
+    String response,question, port;
+    port =  portNum ==0 ? String("CAN 0") : String("CAN 1");
+    question =  port + String(" CANFD BaudRate (number then enter): 0 - NONE/OFF   1 - 5M   2 - 1M   3 - 500k: ");
+    response = ShowMenu(&question);    
+    
+    //storeFD baud rate settings
+    CANSet[portNum].FDbaudRate = byte(response.toInt());
+
+    //set baud rates and configure filters
+    setBaudRates(portNum);
+    CAN_Filters(portNum);
+      
 }
 
 void CAN_BaudRate(UINT8 portNum)
@@ -294,34 +455,11 @@ void CAN_BaudRate(UINT8 portNum)
     port =  portNum == 0 ? String("CAN 0") : String("CAN 1");
     question = port + String(" BaudRate (number then enter): 0 - CANFD Only   1 - 1M   2 - 500k   3 - 250k   4 - 125k: ");
     response = ShowMenu(&question);
+    
+    //store baud rate settings
+    CANSet[portNum].baudRate = byte(response.toInt());
 
-
-    switch (response.toInt())
-    {
-    case 0:
-        stdBaud = (CAN_BAUD_RATE)0;
-        break;
-
-    case 1:
-        stdBaud =   _1M; 
-        break;    
-
-    case 2:     
-        stdBaud =   _500K; 
-        break;    
-
-    case 3:
-        stdBaud =   _250K; 
-        break;
-
-    case 4:
-    default:
-        stdBaud =   _125K; 
-        break;
-
-    };
-
-    CAN_FDBaudRate(portNum,stdBaud);
+    CAN_FDBaudRate(portNum);
 }
 
 
@@ -333,15 +471,18 @@ UINT8 EnableBus()
 
     question = String("Enable Bus Sniffing On? (number then enter): 0 - CAN0   1 - CAN1  2 - BOTH: ");
     response = ShowMenu(&question);  
-    retVal = (UINT8)response.toInt();
+    retVal = byte(response.toInt());
+    //set settings
+    CANSet[0].enabled = retVal;
 
     return(retVal);
 }
 
 
 
-void UserSetupMenu()
+bool UserSetupMenu()
 {
+    bool retVal = true;;
 
     Serial.println(""); 
 	CLEAR_LINE;
@@ -349,72 +490,63 @@ void UserSetupMenu()
     Serial.print("Welcome to "); BLUEFORE; Serial.print("CANTerm! "); WHITEFORE; Serial.print("A really cheapo 2 channel OS agnostic "); YELLOWFORE; Serial.println ("CAN & CANFD sniffer.");
     WHITEFORE;
     Serial.println(""); 
-    Serial.print("Type ENTER to continue and load last setup, or ESC to enter new a new setup.");
-    while(true) // remain here until told to break
+    Serial.println("Type ENTER to continue and load last setup, or ESC to enter new a new setup.");
+    
+    //wait for key entry
+    while(true) 
     {
-     if(Serial.available() > 0) // escape key
-        if(Serial.read() == 13) // enter key
+     if(Serial.available() > 0) 
         break;
     }
 
-    switch (EnableBus())
+    if (Serial.read() == 13)
     {
+        //enter key pressed
+       retVal =  ApplySettings();
 
-    case 0:
-        Serial.println("Port 0 Enabled");
-        delay(1000);
-        PortsOn = 0;
-        CAN_BaudRate(0);
-        break;
+    } else
+    {
+       //any other key pressed, setup menu
+        switch (EnableBus())
+        {
+        
+        case 0:
+            Serial.println("Port 0 Enabled");
+            delay(1000);
+            PortsOn = 0;
+            CAN_BaudRate(0);
+            break;
 
-    case 1:
-        Serial.println("Port 1 Enabled");
-        delay(1000);
-        PortsOn = 1;
-        CAN_BaudRate(1);
-        break;
+        case 1:
+            Serial.println("Port 1 Enabled");
+            delay(1000);
+            PortsOn = 1;
+            CAN_BaudRate(1);
+            break;
 
-    case 2:
-        Serial.println("Both Ports Enabled");
-        delay(1000);
-        PortsOn = 2;
-        CAN_BaudRate(0);
-        CAN_BaudRate(1);
-        break;
+        case 2:
+            Serial.println("Both Ports Enabled");
+            delay(1000);
+            PortsOn = 2;
+            CAN_BaudRate(0);
+            CAN_BaudRate(1);
+            break;
 
-    default:
-        Serial.println("Both Ports Enabled");
-        delay(1000);
-        PortsOn = 2;
-        CAN_BaudRate(0);
-        CAN_BaudRate(1);
-        break;
-    };
+        default:
+            Serial.println("Both Ports Enabled");
+            delay(1000);
+            PortsOn = 2;
+            CAN_BaudRate(0);
+            CAN_BaudRate(1);
+            break;
+        };
+    }
+    //write all new settings to flash
+    storeSettings();
+
+    return(retVal);
 }
 
-
-// bool initSD()
-// {
-//     bool retVal;
-//     retVal = false;
-//     //debugging message for monitor to indicate CPU resets are occuring
-//     Serial.println("System Reset");
-//
-//     Serial.print("Initializing SD card...");
-//
-//     // see if the card is present and can be initialized:
-//     if (!SD.begin(chipSelect))
-//     {
-//         Serial.println("Card failed, or not present");
-//         // don't do anything more:
-//         retVal = false;
-//     }else
-//     {
-//         Serial.println("card initialized.");
-//         retVal = true;
-//     }
-//     return(retVal);
-// }
 void printDisplay() 
 {
 
@@ -448,17 +580,26 @@ void setup()
 
     YELLOWFORE;
 	printDisplay();
-    UserSetupMenu();
-    //set pointers for print classes
-    PrintCAN0.I = &CanPort0;
-    PrintCAN1.I = &CanPort1;
 
-    //clear the screen, print port 0 color header and make cursor invisible
-    CLEAR_SCREEN;
-    BLUEFORE;
-    Serial.print("CAN Port 0 Traffic");
-    WHITEFORE;
-    INVISCURSOR;
+    //good settings loaded
+    if(UserSetupMenu())
+    {
+        //set pointers for print classes
+        PrintCAN0.I = &CanPort0;
+        PrintCAN1.I = &CanPort1;
+
+        //clear the screen, print port 0 color header and make cursor invisible
+        CLEAR_SCREEN;
+        BLUEFORE;
+        Serial.print("CAN Port 0 Traffic");
+        WHITEFORE;
+        INVISCURSOR;
+   
+    }else
+    {
+        //get new settings
+        setup();
+    }
 }
 
 
