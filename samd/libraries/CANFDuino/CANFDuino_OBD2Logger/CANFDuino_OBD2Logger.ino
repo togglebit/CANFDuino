@@ -43,16 +43,19 @@ cOBDParameter OBD_IAT(        "IAT "          , " C"      ,  ENGINE_IAT  , _8BIT
 
 
 //fn to write data to SD
-void writeCANSD_Header()
+void writeOBD_Header()
 {
-    File dataFile = SD.open("datalog.csv", FILE_WRITE);
+    File dataFile = SD.open("OBD2data.csv", FILE_WRITE);
     if (dataFile)
     {
-        dataFile.println("ID,B0,B1,B2,B3,B4,B5,B6,B7");
+        String dataHeader = String(String(OBD_Speed.getName()) + "-" + String(OBD_Speed.getUnits()) +  "," + String(OBD_EngineSpeed.getName()) + "-"  + String(OBD_EngineSpeed.getUnits()) +  "," + String(OBD_Throttle.getName()) + "-" + String(OBD_Throttle.getUnits()) +  "," + String(OBD_Coolant.getName()) + "-" + String(OBD_Coolant.getUnits()) +  "," + String(OBD_EngineLoad.getName()) + "-" + String(OBD_EngineLoad.getUnits()) +  "," + String(OBD_Coolant.getName()) + "-" + String(OBD_Coolant.getUnits()) +  "," + String(OBD_MAF.getName()) + "-" + String(OBD_MAF.getUnits()) +  ","+ String(OBD_IAT.getName()) + "-" + String(OBD_IAT.getUnits()) ); 
+        //String dataHeader = String(String(OBD_Speed.getName()) + "-" + String(OBD_Speed.getUnits()) + "-");
+        
+        dataFile.println(dataHeader);
         dataFile.close();
     } else
     {
-        Serial.println("error opening datalog.csv");
+        Serial.println("error opening and writing header");
     } 
 }
 
@@ -71,7 +74,7 @@ void initSD()
         while (1);
     }
     Serial.println("card initialized.");
-    writeCANSD_Header();
+    writeOBD_Header();
 }
 
 void setup()
@@ -90,15 +93,14 @@ void setup()
     CanPort0.setFiltRxAll();
 
     //init SD card
-    //initSD();
+    initSD();
 }
 
 
-//this is our timer interrupt handler, called at XmS interval
-void PrintScreen()
-{
 
     //print out our latest OBDII data
+void LogScreen()
+{
     Serial.print(OBD_Speed.getName()); 
     Serial.print(OBD_Speed.getData());
     Serial.println(OBD_Speed.getUnits());   
@@ -129,59 +131,37 @@ void PrintScreen()
     Serial.println(OBD_IAT.getUnits());           
 
     Serial.println();
-    Serial.println();
 }
 
 
-/*
-//fn to write data to SD
-void writeCANSD(RX_QUEUE_FRAME *msg)
+
+//write obd2 data to SD
+void logOBDData()
 {
-    UINT8 i;
-    
-    if(msg)
-    {
     // open the file. note that only one file can be open at a time,
     // so you have to close this one before opening another.
-    File dataFile = SD.open("datalog.csv", FILE_WRITE);
+    File dataFile = SD.open("OBD2data.txt", FILE_WRITE);
 
     // if the file is available, write to it:
     if (dataFile)
     {
-        dataFile.print(msg->rxMsgInfo->id,HEX);
-        
-        for(i=0; i<tx2.len; i++)
-        {
-            dataFile.print(","); dataFile.print(msg->rxMsgInfo->data[i],HEX);                
-        }
-        dataFile.println();
-        dataFile.close();
+     //grab all values 
+     String dataline = String(String(OBD_Speed.getData(),DEC )+ "," + String(OBD_EngineSpeed.getData(),DEC) + "," + String(OBD_Throttle.getData(),DEC) + "," + String(OBD_Coolant.getData(),DEC) + "," + String(OBD_EngineLoad.getData(),DEC) + "," + String(OBD_MAF.getData(),DEC) + "," + String(OBD_IAT.getData(),DEC));
+     dataFile.println(dataline); 
+     dataFile.close();
     }
     // if the file isn't open, pop up an error:
     else
     {
-        Serial.println("error opening datalog.txt");
+        Serial.println("error opening OBD2data.txt");
     } 
-    }
-   
 }
- */
+ 
 
 void loop()
 {
     while (1)
-    {           /*first check to see if CAN port 1 is recieving data from port 0, if so log to SD card
-         if (CanPort1.rxCntr != prevRxCtr1)
-         { 
-           for(i=0; i<CanPort1.numRxMsgs; i++)
-           {      
-            writeCANSD(&CanPort1.rxMsgs[i]); 
-           }
-           CanPort1.numRxMsgs = 0;        
-         prevRxCtr1 = CanPort1.rxCntr;
-        }
-        */
-
+    {           
         //poll queue on RxMessages
         CanPort0.RxMsgs();
 
@@ -199,18 +179,26 @@ void loop()
         if (uSecs >= 100000)
         {
             uSecs = 0;
+            //we are sending these OBD2 messages individually every 100mS because some cars cannot take requests very quickly (all at once)
+            //this means the rate at which all messages are obtained is .1sec * #of obd messages
             CanPort0.TxMsgs(NEXT_MSG);
             
-
             //led every 1 sec
-            if (mSecs == 1)
+            if (mSecs == 10)
             {
                 //toggle LED
                 bit = !bit;
-                digitalWrite(28, bit ? LOW : HIGH);   
-
-                PrintScreen();
+                digitalWrite(28, bit ? LOW : HIGH); 
+                  
+               //write directly to CSV every second
+                logOBDData();
             }
+            //print to screen every 5 sec as a check
+            if (mSecs == 50)
+            {
+              LogScreen();
+            }
+            
             //count up to 5 Sec
             mSecs = mSecs < 50 ? mSecs+1 : 0; 
         }
