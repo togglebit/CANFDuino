@@ -38,7 +38,7 @@ Note this content can also be found here [https://togglebit.net/getting-started-
 ## CANFduino_CANTerm.ino
 ![Image](https://togglebit.net/wp-content/uploads/2021/11/ezgif.com-gif-maker-1.gif)
 
-**CANTerm** is a cheapo 2 port CAN/CANFD packet monitor that can be used in simple terminal programs regardless of OS without special PC software. The CANFDuino is used to print packet payloads to the screen using terminal commands in static locations for easy viewing. Supports multiple CAN and CANFD baud rates, ID range filtering and stores the last settings into flash.
+**CANTerm** is a cheapo 2 port CAN/CANFD packet monitor that can be used in simple serial terminal programs regardless of OS without special PC software. The CANFDuino is used to print packet payloads to the screen using terminal commands in static locations for easy viewing. Supports multiple CAN and CANFD baud rates, ID range filtering and stores the last settings into flash.
 
 CANTerm has been tested with the PuTTY terminal program (2MBaud). PuTTY is probably the most flexible terminal tool for Windows, where the font size, number of lines, size of display can be configured to pack more data on one screen. [https://www.chiark.greenend.org.uk/~sgtatham/putty/](https://www.chiark.greenend.org.uk/~sgtatham/putty/)
 
@@ -47,3 +47,30 @@ Monitor CAN bus traffic in the comfort of a Chrome browser with serial terminal 
 [https://googlechromelabs.github.io/serial-terminal/](https://googlechromelabs.github.io/serial-terminal/)
 
 Note: The Arduino Serial Monitor is not a terminal program and will not work.
+**Steps for using CANTerm**
+
+**Step 1.** - Do everything above in getting started to make sure yoru hardware works.
+
+**Step 2.** - Open ArduinoIDE, go to File->Examples->CANFDuino_CANTerm.ino
+
+**Step 3.** - Upload it with the IDE.
+
+**Step 4.** - Open up your favorite terminal program (PuTTY, or click the chromelabs serial terminal link above), select the baud rate to 2MBaud, select the correct COM port and click connect. Wait for a few seconds for on-screen instructions to appear and follow them (if no on-screen instructions, check the baud rate and COM port setting and connect again).
+
+**Step 5.** - Select if you want CAN0 or CAN1 or both ports to do packet monitoring.
+
+**Step 6.** - Select the baud rate for CAN packets (or none)
+
+**Step 7.** - Select the baud rate for CANFD packets (or none)
+
+**Step 8.** - Type in the hex ID for the LOWEST ID you want to monitor (or type ALL for all packets to be monitored)
+
+**Step 9.** - Type in the hex ID for the HIGHEST ID you want to monitor. All ID's between these ranges will pass through
+
+**Step 10.** - If you selected 2 ports to monitor....you will be asked to repeat settings for the second port.
+
+Note: if you do not want to wait the several seconds between power cycles or new terminal connections use the bootloader bypass jumper detailed in the hookup guide.
+
+
+
+
