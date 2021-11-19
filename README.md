@@ -47,9 +47,10 @@ Monitor CAN bus traffic in the comfort of a Chrome browser with serial terminal 
 [https://googlechromelabs.github.io/serial-terminal/](https://googlechromelabs.github.io/serial-terminal/)
 
 Note: The Arduino Serial Monitor is not a terminal program and will not work.
-**Steps for using CANTerm**
 
-**Step 1.** - Do everything above in getting started to make sure yoru hardware works.
+**10 Steps for using CANTerm**
+
+**Step 1.** - Do everything above in getting started section to make sure yoru hardware works. Hook up the CAN/FD ports to the buss(es) you want to monitor. 
 
 **Step 2.** - Open ArduinoIDE, go to File->Examples->CANFDuino_CANTerm.ino
 
@@ -67,7 +68,7 @@ Note: The Arduino Serial Monitor is not a terminal program and will not work.
 
 **Step 9.** - Type in the hex ID for the HIGHEST ID you want to monitor. All ID's between these ranges will pass through
 
-**Step 10.** - If you selected 2 ports to monitor....you will be asked to repeat settings for the second port.
+**Step 10.** - If you selected 2 ports to monitor....you will be asked to repeat settings for the second port. Watch for traffic to hit the screen.
 
 Note: if you do not want to wait the several seconds between power cycles or new terminal connections use the bootloader bypass jumper detailed in the hookup guide.
 
