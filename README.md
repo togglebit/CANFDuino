@@ -35,7 +35,7 @@ Note this content can also be found here [https://togglebit.net/getting-started-
 **Step 11.** - See diagnostic printout in the comms window indicating pass/fail of testing. Typically the cause of failure is improper wiring or no termination resistor.
 
 # Example Code
-## CANFduino_CANTerm.ino
+## CANFduino_CANTerm.ino - CAN/CANFD Packet Monitoring
 ![Image](https://togglebit.net/wp-content/uploads/2021/11/ezgif.com-gif-maker-1.gif)
 
 **CANTerm** is a cheapo 2 port CAN/CANFD packet monitor that can be used in simple serial terminal programs regardless of OS without special PC software. The CANFDuino is used to print packet payloads to the screen using terminal commands in static locations for easy viewing. Supports multiple CAN and CANFD baud rates, ID range filtering and stores the last settings into flash.
