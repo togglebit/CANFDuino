@@ -36,11 +36,13 @@ Note this content can also be found here [https://togglebit.net/getting-started-
 
 ## Example Code
 **CANFduino_CANTerm.ino**
+
 CANTerm is a cheapo 2 port CAN/CANFD packet monitor that can be used in simple terminal programs regardless of OS without special PC software. The CANFDuino is used to print packet payloads to the screen in static locations for easy viewing. Supports multiple CAN and CANFD baud rates, ID range filtering and stores the last settings into flash.
 
 CANTerm has been tested with PuTTY terminal program (2MBaud)
+https://www.chiark.greenend.org.uk/~sgtatham/putty/
 
-Monitor CAN bus traffic in the Chrome browser with serial terminal from google's chromelabs! 
+Monitor CAN bus traffic in the comfort of a Chrome browser with serial terminal from google's chromelabs! (2MBaud) 
 https://googlechromelabs.github.io/serial-terminal/
 
 
