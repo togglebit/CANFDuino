@@ -7,7 +7,7 @@ CANFDuino is the best platform for open source CAN bus Arduino projects. It comb
 ## Hardware Hookups
 For making connections the **hookup guide** is here: [https://togglebit.net/canfduino-hookup-guide/](https://togglebit.net/canfduino-hookup-guide/)
 
-## Installing the Library and Running First Sketch
+## Installing the Library and First Sketch
 The following are steps for installing and testing CANFDuino support for the Arduino IDE, running and testing your first CAN sketch:
 
 Note this content can also be found here [https://togglebit.net/getting-started-with-canfduino/](https://togglebit.net/getting-started-with-canfduino/)
@@ -33,5 +33,14 @@ Note this content can also be found here [https://togglebit.net/getting-started-
 **Step 10.** - Go to Tools->Serial Monitor, note that this will also cause entry into bootloader for about 4-5 seconds before the sketch runs (for permanant code/bootloader bypass there is a jumper on the PCB).
 
 **Step 11.** - See diagnostic printout in the comms window indicating pass/fail of testing. Typically the cause of failure is improper wiring or no termination resistor.
+
+## Example Code
+**CANFduino_CANTerm.ino**
+CANTerm is a cheapo 2 port CAN/CANFD packet monitor that can be used in simple terminal programs regardless of OS without special PC software. The CANFDuino is used to print packet payloads to the screen in static locations for easy viewing. Supports multiple CAN and CANFD baud rates, ID range filtering and stores the last settings into flash.
+
+CANTerm has been tested with PuTTY terminal program (2MBaud)
+
+Monitor CAN bus traffic in the Chrome browser with serial terminal from google's chromelabs! 
+https://googlechromelabs.github.io/serial-terminal/
 
 
