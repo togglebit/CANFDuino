@@ -40,11 +40,10 @@ Note this content can also be found here [https://togglebit.net/getting-started-
 
 **CANTerm** is a cheapo 2 port CAN/CANFD packet monitor that can be used in simple terminal programs regardless of OS without special PC software. The CANFDuino is used to print packet payloads to the screen using terminal commands in static locations for easy viewing. Supports multiple CAN and CANFD baud rates, ID range filtering and stores the last settings into flash.
 
-CANTerm has been tested with the PuTTY terminal program (2MBaud). PuTTY is probably the most flexible terminal tool for Windows, where the font size, number of lines, size of display can be configured to pack more data on one screen. 
-[https://www.chiark.greenend.org.uk/~sgtatham/putty/](https://www.chiark.greenend.org.uk/~sgtatham/putty/)
+CANTerm has been tested with the PuTTY terminal program (2MBaud). PuTTY is probably the most flexible terminal tool for Windows, where the font size, number of lines, size of display can be configured to pack more data on one screen. [https://www.chiark.greenend.org.uk/~sgtatham/putty/](https://www.chiark.greenend.org.uk/~sgtatham/putty/)
 
 
-Monitoring CAN bus traffic in the comfort of a Chrome browser with serial terminal from google's chromelabs (2MBaud). Just click the link below and connect to the COM port.
+Monitor CAN bus traffic in the comfort of a Chrome browser with serial terminal from google's chromelabs (2MBaud). Just click the link below and connect to the COM port.
 [https://googlechromelabs.github.io/serial-terminal/](https://googlechromelabs.github.io/serial-terminal/)
 
 Note: The Arduino Serial Monitor is not a terminal program and will not work.
