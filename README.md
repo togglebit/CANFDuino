@@ -73,7 +73,35 @@ Note: The Arduino Serial Monitor is not a terminal program and will not work.
 Note: if you do not want to wait the several seconds between power cycles or new terminal connections use the bootloader bypass jumper detailed in the hookup guide.
 
 ## CANFDuino_GatewayCAN02CAN1.ino
+This is a simple example of receiving a message on CAN0, modifying that message and re-sending it on CAN1. The example is very simple and looks for ID 0x100, modifies byte 0 and re-transmits on CAN1. The example uses a virtual function overload **CallbackRx** to implement the transmission when the message is detected as being received by **RxMsgs** which is simply a polling function that de-queues packets and can fireoff CallbackRx when a specific ID is detected. The user must define what happens in CallbackRx per the example below: 
 
+```C:
+
+bool RxTx::CallbackRx(RX_QUEUE_FRAME *R)
+{
+  bool retVal = false;
+    UINT8 i;
+  if (R)
+  {
+    digitalWrite(3, HIGH);
+    
+    tx.id = R->rxMsgInfo.id;
+    tx.len = R->rxMsgInfo.data_len;
+    
+    //copy all data bytes except byte 0
+    for(i=1;i<tx.len;i++)
+    {
+      tx.data[i] - R->data[i];
+    }
+    //lastly modify byte 0, re-transmit on can port 1
+    tx.data[0] = 0x80;
+    CanPort1.TxMsg(&tx);
+  }
+  return(retVal);
+}
+```
+
+Note, as used in CANTerm, if alot of messages are expected, the following macro can be used to increase the reception buffer size **#define MAX_NUM_RXFRAMES  64**
 
 ## CANFDuino_OBD2Logger.ino - OBD2 datalogger to SD Card
 
@@ -89,6 +117,5 @@ These are all very simple test sketches for the basic Arduino analog inputs, dig
 ## CANFDuino_2WireMaster.ino, CANFDuino_2WireSlave.ino, CANFDuino_SerialTest.ino
 These are the simple test functions for the serial interfaces. Open the sketches to see the pinout or consult the **"variant.cpp"** file in the CANFDuino\samd\variants\
 folder to see the mapping to the arduino IO.
-
 
 
