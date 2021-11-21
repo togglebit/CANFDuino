@@ -119,13 +119,13 @@ cOBDParameter OBD_MAF(        "MAF "          , " grams/s",  ENGINE_MAF  , _16BI
 cOBDParameter OBD_IAT(        "IAT "          , " C"      ,  ENGINE_IAT  , _8BITS,   false ,  CURRENT,  1,    -40,  &CanPort0, false);
 ```
 
-## Simple CAN/CANFD Testing CANFDuino_Test500kb.ino, CANFDuino_Test5Mb.ino
+## CAN/CANFD Testing CANFDuino_Test500kb.ino, CANFDuino_Test5Mb.ino
 These are the sketches used in the getting started. With CAN0 and CAN1 wired together, they exchange messages to verify functionality and the outcome is printed to the serial monitor. The 500KBaud sketch uses standard CAN, the 5MB sketch uses CANFD.
 
-## Simple IO Testing - CANFDuino_DigitalOut.ino, CANFDuino_DigitalPWM.ino, CANFDuino_DigitalInput.ino, CANFDuino_Analog.ino
+## IO Testing - CANFDuino_DigitalOut.ino, CANFDuino_DigitalPWM.ino, CANFDuino_DigitalInput.ino, CANFDuino_Analog.ino
 These are all very simple test sketches for the basic Arduino analog inputs, digital inputs, and digital output functionality. All of the pins used in the sketches are labeled on the silkscreen.
 
-## Simple Communications Testing - CANFDuino_2WireMaster.ino, CANFDuino_2WireSlave.ino, CANFDuino_SerialTest.ino, CANFDuino_SPI.ino
+## Communications Testing - CANFDuino_2WireMaster.ino, CANFDuino_2WireSlave.ino, CANFDuino_SerialTest.ino, CANFDuino_SPI.ino
 These are the simple test functions for the serial interfaces that exist in the Arduino platform. Open the sketches to see the pinout or consult the **"variant.cpp"** file in the CANFDuino\samd\variants\ folder to see the mapping to the arduino IO.
 
 
