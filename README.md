@@ -35,7 +35,7 @@ Note this content can also be found here [https://togglebit.net/getting-started-
 **Step 11.** - See diagnostic printout in the comms window indicating pass/fail of testing. Typically the cause of failure is improper wiring or no termination resistor.
 
 # Example Code
-## CANFduino_CANTerm.ino - CAN/CANFD Packet Monitoring
+## CAN/CANFD Packet Monitoring - CANFduino_CANTerm.ino
 ![Image](https://togglebit.net/wp-content/uploads/2021/11/ezgif.com-gif-maker-1.gif)
 
 **CANTerm** is a cheapo 2 port CAN/CANFD packet monitor that can be used in simple serial terminal programs regardless of OS without special PC software. The CANFDuino is used to print packet payloads to the screen using terminal commands in static locations for easy viewing. Supports multiple CAN and CANFD baud rates, ID range filtering and stores the last settings into flash.
@@ -72,7 +72,7 @@ Note: The Arduino Serial Monitor is not a terminal program and will not work.
 
 Note: if you do not want to wait the several seconds between power cycles or new terminal connections use the bootloader bypass jumper detailed in the hookup guide.
 
-## CANFDuino_GatewayCAN02CAN1.ino
+## Gateway CAN Messages - CANFDuino_GatewayCAN02CAN1.ino
 This is a simple example of receiving a message on CAN0, modifying that message and re-sending it on CAN1. The example is very simple and looks for ID 0x100, modifies byte 0 and re-transmits on CAN1. The example uses a virtual function overload **CallbackRx** to implement the transmission when the message is detected as being received by **RxMsgs** which is simply a polling function that de-queues packets and can fireoff CallbackRx when a specific ID is detected. The user must define what happens in CallbackRx per the example below: 
 
 ```C:
@@ -103,19 +103,29 @@ bool RxTx::CallbackRx(RX_QUEUE_FRAME *R)
 
 Note, as used in CANTerm, if alot of messages are expected, the following macro can be used to increase the reception buffer size **#define MAX_NUM_RXFRAMES  64**
 
-## CANFDuino_OBD2Logger.ino - OBD2 datalogger to SD Card
+## OBD2 datalogger to SD Card - CANFDuino_OBD2Logger.ino
 
 This is an example sketch that uses and OBD2 library to continously poll the OBD2 port of a vehicle and log the resulting data in CSV format to the SD card of the CANFDuino. The data is also printed to the serial monitor (LogScreen). This particular example polls for RPM, Speed, Throttle Position, Coolant Temp, Engine Load, Mass Airflow Rate, and Intake Air Temp. More data can be obtained by adding an **cOBDParameter** object for the item of interest, OBD2 is well documented a reference of parameters can be found here [https://en.wikipedia.org/wiki/OBD-II_PIDs] (https://en.wikipedia.org/wiki/OBD-II_PIDs). Have a look at the OBD2.h file and the parameters given in the example to get an idea how to properly add a new parameter (you will also need to modify the LogScreen, WriteOBD2header and logOBDData functions). **Note** that if you are using an OBD2 to DB9 cable, you need to watch the pinout of the DB9 as the CANFDuino uses 2,7 and 3 (see hookup guide), many OBD2 to DB9 cables use pins 3,5 and 1. 
+```
+/***** DEFINITIONS FOR OBD MESSAGES ON CAN PORT 0, see https://en.wikipedia.org/wiki/OBD-II_PIDs to add your own ***************/
+//char _name[10], char _units[10], OBD_PID pid,  uint8_t OBD_PID_SIZE size, bool _signed, OBD_MODE_REQ mode, float32 slope, float32 offset, cAcquireCAN *, extended ID;
 
+cOBDParameter OBD_Speed(      "Speed "        , " KPH"    ,  SPEED       , _8BITS,   false,   CURRENT,  1,      0,  &CanPort0, false);
+cOBDParameter OBD_EngineSpeed("Engine Speed " , " RPM"    ,  ENGINE_RPM  , _16BITS,  false,   CURRENT,  0.25,   0,  &CanPort0, false);
+cOBDParameter OBD_Throttle(   "Throttle "     , " %"      ,  THROTTLE_POS, _8BITS,   false,   CURRENT,  0.3922, 0,  &CanPort0, false);
+cOBDParameter OBD_Coolant(    "Coolant "      , " C"      ,  COOLANT_TEMP, _8BITS,   false ,  CURRENT,  1,    -40,  &CanPort0, false);
+cOBDParameter OBD_EngineLoad( "Load "         , " %"      ,  ENGINE_LOAD , _8BITS,   false,   CURRENT,  0.3922, 0,  &CanPort0, false);
+cOBDParameter OBD_MAF(        "MAF "          , " grams/s",  ENGINE_MAF  , _16BITS,  false,   CURRENT,  0.01,   0,  &CanPort0, false);
+cOBDParameter OBD_IAT(        "IAT "          , " C"      ,  ENGINE_IAT  , _8BITS,   false ,  CURRENT,  1,    -40,  &CanPort0, false);
+```
 
-## CANFDuino_Test500kb.ino, CANFDuino_Test5Mb.ino - Simple CAN Testing
+## Simple CAN/CANFD Testing CANFDuino_Test500kb.ino, CANFDuino_Test5Mb.ino
 These are the sketches used in the getting started. With CAN0 and CAN1 wired together, they exchange messages to verify functionality and the outcome is printed to the serial monitor. The 500KBaud sketch uses standard CAN, the 5MB sketch uses CANFD.
 
-## CANFDuino_DigitalOut.ino, CANFDuino_DigitalPWM.ino, CANFDuino_DigitalInput.ino, CANFDuino_Analog.ino
+## Simple IO Testing - CANFDuino_DigitalOut.ino, CANFDuino_DigitalPWM.ino, CANFDuino_DigitalInput.ino, CANFDuino_Analog.ino
 These are all very simple test sketches for the basic Arduino analog inputs, digital inputs, and digital output functionality. All of the pins used in the sketches are labeled on the silkscreen.
 
-## CANFDuino_2WireMaster.ino, CANFDuino_2WireSlave.ino, CANFDuino_SerialTest.ino
-These are the simple test functions for the serial interfaces. Open the sketches to see the pinout or consult the **"variant.cpp"** file in the CANFDuino\samd\variants\
-folder to see the mapping to the arduino IO.
+## Simple Communications Testing - CANFDuino_2WireMaster.ino, CANFDuino_2WireSlave.ino, CANFDuino_SerialTest.ino, CANFDuino_SPI.ino
+These are the simple test functions for the serial interfaces that exist in the Arduino platform. Open the sketches to see the pinout or consult the **"variant.cpp"** file in the CANFDuino\samd\variants\ folder to see the mapping to the arduino IO.
 
 
