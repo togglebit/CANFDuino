@@ -45,6 +45,8 @@ void setup()
     tx2.id  = 0x200;
     tx2.len = 8;
 
+  
+
 }
 
 //determine how often to send/print
@@ -71,6 +73,7 @@ void loop()
             uSecs = 0;
             
             //grab analog values
+            analogReadResolution(12);
             analogs[0] =  analogRead(A0);
             analogs[1] =  analogRead(A1);
             analogs[2] =  analogRead(A2);
