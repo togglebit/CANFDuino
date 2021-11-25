@@ -119,8 +119,11 @@ cOBDParameter OBD_MAF(        "MAF "          , " grams/s",  ENGINE_MAF  , _16BI
 cOBDParameter OBD_IAT(        "IAT "          , " C"      ,  ENGINE_IAT  , _8BITS,   false ,  CURRENT,  1,    -40,  &CanPort0, false);
 ```
 
-## Analog to CANBus - CANFDuino_Analog2CAN.ino
+## Analog to CAN - CANFDuino_Analog2CAN.ino
 This example reads analog inputs A0 to A7 and sends the results over CAN bus in two messages 0x100 and 0x200. The values are sent most signficant byte first, and keep in mind the SAMC21 M0 is a 3.3V part, with a 12bit ADC. This means 0xFFF = 4096 = 3.3V by default (internal reference for ADC can be changed see Arduino library). The example code uses a simple periodic time poll to send them every xmSec and a DEBUG macro to optionaly print the values to screen. The packets could be stuffed a bit tighter but for simplicity we are sending 16bits for 12bit vavlues. Also, a single CANFD message could handle all of the analog inputs in one message. 
+
+## CAN to PWM - CANFDuino_CAN2PWM.ino
+This example reads the 8 byte contents of message 0x100 and drives 8 PWM outputs based upon these packet values. There are 16 pins that can bused as PWM output (see PWM output example code), in this exapmle we are using pins 18-26. The default PWM base frequency is about 700Hz. 
 
 ## CAN/CANFD Testing CANFDuino_Test500kb.ino, CANFDuino_Test5Mb.ino
 These are the sketches used in the getting started. With CAN0 and CAN1 wired together, they exchange messages to verify functionality and the outcome is printed to the serial monitor. The 500KBaud sketch uses standard CAN, the 5MB sketch uses CANFD.
