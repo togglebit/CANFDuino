@@ -11,60 +11,46 @@
   License along with this library; if not, write to the Free Software
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
+#include <CAN_CANFD.h>
+
 
 cCAN_CANFD CanPort0(0, _500K, _500K, MCAN_MODE_CAN);
 
-int val;
-byte pwm;
+UINT8 i,x,z;
 
 void setup()
 {
-  delay(5000);
-          pinMode(0, OUTPUT);
-          pinMode(1, OUTPUT);
-          pinMode(12, OUTPUT);
-          pinMode(13, OUTPUT);
-          pinMode(14, OUTPUT);
-          pinMode(15, OUTPUT);
-          pinMode(17, OUTPUT);
-          pinMode(18, OUTPUT);
-          pinMode(19, OUTPUT);
-          pinMode(21, OUTPUT);
-          pinMode(22, OUTPUT);
-          pinMode(23, OUTPUT);
-          pinMode(24, OUTPUT);
-          pinMode(25, OUTPUT);
-
-           // initialize digital pin LED_BUILTIN as an output.
-          pinMode(28, OUTPUT);
-          digitalWrite(28, LOW);
+      for(i=18; i<26; i++)
+      {
+          //we are going to drive pins 18-25
+          pinMode(i, OUTPUT);
+      }
           Serial.begin(115200);
           Serial.println("system reset");
-}
+
+          CanPort0.Initialize();
+          //only look for CAN ID 0x100, this is where we want our PWM messages
+          CanPort0.setFiltRxRange(0x100,0x100);
+}                                 
 
 
 void loop()
 {
-    //write to all PWM outputs
-    delay(500);
-    pwm +=1; 
-    analogWrite(0, pwm);
-    analogWrite(1, pwm);
-    analogWrite(12, pwm);
-    analogWrite(13, pwm);
-    analogWrite(14, pwm);
-    analogWrite(15, pwm);
-    analogWrite(17, pwm);  
-    analogWrite(18, pwm);
-    analogWrite(19, pwm);
-    analogWrite(20, pwm);
-    analogWrite(21, pwm);
-    analogWrite(22, pwm);
-    analogWrite(23, pwm);
-    analogWrite(24, pwm);
-    analogWrite(25, pwm);
 
-    Serial.print("PWM Outputs At: "); Serial.println(pwm); 
+    //poll for messages, only looking for 0x100
+    CanPort0.RxMsgs();
     
-   
+    //if we have a message, drive outputs to new pwm value
+    if(CanPort0.numRxMsgs)
+    {
+      //PWM outputs can be 0,1,12-26, except 16. 
+      //we will use 8channels in this case, start at ouptut 18-25
+      x = 18;
+
+      //unload first 8 bytes of can message containing values 0-255
+      for(z=0; z<8; z++)
+      {
+          analogWrite(x++, CanPort0.rxMsgs[i].data[z]);
+      }
+    }
 }
