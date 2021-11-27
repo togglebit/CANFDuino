@@ -35,7 +35,7 @@ Note this content can also be found here [https://togglebit.net/getting-started-
 **Step 11.** - See diagnostic printout in the comms window indicating pass/fail of testing. Typically the cause of failure is improper wiring or no termination resistor.
 
 # Example Code
-All of the examples below are found in the C:\Users\YOUR USERNAME\Documents\Arduino\hardware\CANFDuino\samd\libraries\CANFDuino folder. This can also be accessed in the IDE by going to File->Examples->CANFDuino->.
+[All example sketches are found here](https://github.com/togglebit/CANFDuino/tree/master/samd/libraries/CANFDuino). If you have followed the instructions above, all of the examples below are found locally on your machine in the C:\Users\YOUR USERNAME\Documents\Arduino\hardware\CANFDuino\samd\libraries\CANFDuino folder. This can also be accessed in the IDE by going to File->Examples->CANFDuino->.
 
 ## CAN/CANFD Packet Monitoring
 
