@@ -34,6 +34,14 @@ Note this content can also be found here [https://togglebit.net/getting-started-
 
 **Step 11.** - See diagnostic printout in the comms window indicating pass/fail of testing. Typically the cause of failure is improper wiring or no termination resistor.
 
+***Ubuntu Flashing***
+1. download: https://www.mattairtech.com/software/arduino/Bossa-1.7.0-mattairtech-2-x86_64-linux-gnu.tar.gz
+
+2. Extract and copy bossac and other binaries to installation path of bossac CANFDUINO Arduino Studio project path -
+cp -r * /home/disdi/Downloads/arduino-1.8.14/hardware/CANFDuino/tools/bossac/CANFDuinoBossac/
+
+3. Flash the binary directly or via Arduno IDE sudo bossac  --port=ttyUSB0  -e -w -v -b /tmp/CANFDuino_Test500kb.ino.CANFDuino.bin
+
 # Example Code
 [All example sketches are found here](https://github.com/togglebit/CANFDuino/tree/master/samd/libraries/CANFDuino). If you have followed the instructions above, all of the examples below are found locally on your machine in the C:\Users\YOUR USERNAME\Documents\Arduino\hardware\CANFDuino\samd\libraries\CANFDuino folder. This can also be accessed in the IDE by going to File->Examples->CANFDuino->.
 
