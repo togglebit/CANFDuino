@@ -22,7 +22,7 @@ Note this content can also be found here [https://togglebit.net/getting-started-
 
 **Step 5.** - Go to File->Examples->CANFDuino->CANFDuino_Test500Kb.ino (have a look at all the other examples as well)
 
-**Step 6.** - Wire the CANbus DB9 connectors or jump the 2pin headers on the PCB to connect CAN0 bus to the CAN1 bus. CAN0 High->CAN1 High, CAN1 Low->CAN1 Low.
+**Step 6.** - Wire the CANbus DB9 connectors or jump the 2pin headers on the PCB to connect CAN0 bus to the CAN1 bus. CAN0 High->CAN1 High, CAN0 Low->CAN1 Low.
 
 **Step 7.** - Jumper at least one of the two termination resistors on the PCB enabling termnination resistors on the bus. (two ideally)
 
