@@ -34,8 +34,22 @@ Note this content can also be found here [https://togglebit.net/getting-started-
 
 **Step 11.** - See diagnostic printout in the comms window indicating pass/fail of testing. Typically the cause of failure is improper wiring or no termination resistor.
 
+***Ubuntu Flashing***
+1. download: https://www.mattairtech.com/software/arduino/Bossa-1.7.0-mattairtech-2-x86_64-linux-gnu.tar.gz
+
+2. Extract and copy bossac and other binaries to installation path of bossac CANFDUINO Arduino Studio project path -
+cp -r * /home/disdi/Downloads/arduino-1.8.14/hardware/CANFDuino/tools/bossac/CANFDuinoBossac/
+
+3. Flash the binary directly or via Arduno IDE sudo bossac  --port=ttyUSB0  -e -w -v -b /tmp/CANFDuino_Test500kb.ino.CANFDuino.bin
+
 # Example Code
-## CAN/CANFD Packet Monitoring - CANFduino_CANTerm.ino
+[All example sketches are found here](https://github.com/togglebit/CANFDuino/tree/master/samd/libraries/CANFDuino). If you have followed the instructions above, all of the examples below are found locally on your machine in the C:\Users\YOUR USERNAME\Documents\Arduino\hardware\CANFDuino\samd\libraries\CANFDuino folder. This can also be accessed in the IDE by going to File->Examples->CANFDuino->.
+
+## CAN/CANFD Packet Monitoring
+
+***CANFduino_CANTerm.ino***
+
+
 ![Image](https://togglebit.net/wp-content/uploads/2021/11/ezgif.com-gif-maker-1.gif)
 
 **CANTerm** is a cheapo 2 port CAN/CANFD packet monitor that can be used in simple serial terminal programs regardless of OS without special PC software. The CANFDuino is used to print packet payloads to the screen using terminal commands in static locations for easy viewing. Supports multiple CAN and CANFD baud rates, ID range filtering and stores the last settings into flash.
@@ -72,7 +86,10 @@ Note: The Arduino Serial Monitor is not a terminal program and will not work.
 
 Note: if you do not want to wait the several seconds between power cycles or new terminal connections use the bootloader bypass jumper detailed in the hookup guide.
 
-## Gateway CAN Messages - CANFDuino_GatewayCAN02CAN1.ino
+## Gateway CAN Messages 
+
+***CANFDuino_GatewayCAN02CAN1.ino***
+
 This is a simple example of receiving a message on CAN0, modifying that message and re-sending it on CAN1. The example is very simple and looks for ID 0x100, modifies byte 0 and re-transmits on CAN1. The example uses a virtual function overload **CallbackRx** to implement the transmission when the message is detected as being received by **RxMsgs** which is simply a polling function that de-queues packets and can fireoff CallbackRx when a specific ID is detected. The user must define what happens in CallbackRx per the example below: 
 
 ```C:
@@ -103,7 +120,9 @@ bool RxTx::CallbackRx(RX_QUEUE_FRAME *R)
 
 Note, as used in CANTerm, if alot of messages are expected, the following macro can be used to increase the reception buffer size **#define MAX_NUM_RXFRAMES  64**
 
-## OBD2 datalogger to SD Card - CANFDuino_OBD2Logger.ino
+## OBD2 datalogger to SD Card 
+
+***CANFDuino_OBD2Logger.ino***
 
 This is an example sketch that uses and OBD2 library to continously poll the OBD2 port of a vehicle and log the resulting data in CSV format to the SD card of the CANFDuino. The data is also printed to the serial monitor (LogScreen). This particular example polls for RPM, Speed, Throttle Position, Coolant Temp, Engine Load, Mass Airflow Rate, and Intake Air Temp. More data can be obtained by adding an **cOBDParameter** object for the item of interest, OBD2 is well documented a reference of parameters can be found here [https://en.wikipedia.org/wiki/OBD-II_PIDs] (https://en.wikipedia.org/wiki/OBD-II_PIDs). Have a look at the OBD2.h file and the parameters given in the example to get an idea how to properly add a new parameter (you will also need to modify the LogScreen, WriteOBD2header and logOBDData functions). **Note** that if you are using an OBD2 to DB9 cable, you need to watch the pinout of the DB9 as the CANFDuino uses 2,7 and 3 (see hookup guide), many OBD2 to DB9 cables use pins 3,5 and 1. 
 ```
@@ -119,16 +138,34 @@ cOBDParameter OBD_MAF(        "MAF "          , " grams/s",  ENGINE_MAF  , _16BI
 cOBDParameter OBD_IAT(        "IAT "          , " C"      ,  ENGINE_IAT  , _8BITS,   false ,  CURRENT,  1,    -40,  &CanPort0, false);
 ```
 
-## Analog to CANBus - CANFDuino_Analog2CAN.ino
+## Analog to CAN 
+
+***CANFDuino_Analog2CAN.ino***
+
 This example reads analog inputs A0 to A7 and sends the results over CAN bus in two messages 0x100 and 0x200. The values are sent most signficant byte first, and keep in mind the SAMC21 M0 is a 3.3V part, with a 12bit ADC. This means 0xFFF = 4096 = 3.3V by default (internal reference for ADC can be changed see Arduino library). The example code uses a simple periodic time poll to send them every xmSec and a DEBUG macro to optionaly print the values to screen. The packets could be stuffed a bit tighter but for simplicity we are sending 16bits for 12bit vavlues. Also, a single CANFD message could handle all of the analog inputs in one message. 
 
-## CAN/CANFD Testing CANFDuino_Test500kb.ino, CANFDuino_Test5Mb.ino
+## CAN to PWM 
+
+***CANFDuino_CAN2PWM.ino***
+
+This example reads the 8 byte contents of message 0x100 and drives 8 PWM outputs based upon these packet values. There are 16 pins that can bused as PWM output (see PWM output example code), in this exapmle we are using pins 18-26. The default PWM base frequency is about 700Hz. 
+
+## CAN/CANFD Testing 
+
+***CANFDuino_Test500kb.ino, CANFDuino_Test5Mb.ino***
+
 These are the sketches used in the getting started. With CAN0 and CAN1 wired together, they exchange messages to verify functionality and the outcome is printed to the serial monitor. The 500KBaud sketch uses standard CAN, the 5MB sketch uses CANFD.
 
-## IO Testing - CANFDuino_DigitalOut.ino, CANFDuino_DigitalPWM.ino, CANFDuino_DigitalInput.ino, CANFDuino_Analog.ino
+## IO Testing 
+
+***CANFDuino_DigitalOut.ino, CANFDuino_DigitalPWM.ino, CANFDuino_DigitalInput.ino, CANFDuino_Analog.ino***
+
 These are all very simple test sketches for the basic Arduino analog inputs, digital inputs, and digital output functionality. All of the pins used in the sketches are labeled on the silkscreen.
 
-## Communications Testing - CANFDuino_2WireMaster.ino, CANFDuino_2WireSlave.ino, CANFDuino_SerialTest.ino, CANFDuino_SPI.ino
+## Communications Testing 
+
+***CANFDuino_2WireMaster.ino, CANFDuino_2WireSlave.ino, CANFDuino_SerialTest.ino, CANFDuino_SPI.ino***
+
 These are the simple test functions for the serial interfaces that exist in the Arduino platform. Open the sketches to see the pinout or consult the **"variant.cpp"** file in the CANFDuino\samd\variants\ folder to see the mapping to the arduino IO.
 
 
