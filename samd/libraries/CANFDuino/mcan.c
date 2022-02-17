@@ -767,8 +767,8 @@ UINT8 mcan_dequeue_received_msg(struct MCAN_SET *set, UINT8 fifo,
 		 * application-owned buffer */
 		if (len > buf_elem_data_size)
 			len = buf_elem_data_size;
-		if (len > msg->data_len)
-			len = msg->data_len;
+		//if (len > msg->data_len)        //DKasamis removed this for a bug that seemed to latch the dlc wrong.
+    		//	len = msg->data_len;
 		memcpy(msg->data, pThisRxBuf, len);
 		msg->data_len = len;
 	}
