@@ -120,47 +120,10 @@ bool RxTx::CallbackRx(RX_QUEUE_FRAME *R)
 ***CANFDuino_PassThruGateway.ino***
 In this example, We will be intercepting the CAN lines from one "black box" to another with the CANFDuino int the middle acting as a "modifier-repeater". We are receiving a message on CAN ID 0x64 on CAN 0 modifying it's contents and re-transmitting it on CAN 1, and doing the same for message 0x200 on CAN 1 re-transmitting on CAN 0. We will also "pass-thru" all other messages bidirectionally between CAN 0 and CAN 1 as "untouched". The CAN bus should be physically broken (not spliced) with the upstream device wired to CAN H and CAN L signals on the CANFDuino shield port 0, and the downstream devices wired to CAN H and CAN L on CAN 1.
 ```C:
-#include <CAN_CANFD.h>
-#include <compiler.h>
-#include <mcan.h>
-#include <mcan_helper.h>
-#include <typedef.h>
-
-#include "CAN_CANFD.h"
-#define NUM_MSGS 10
-
-cCAN_CANFD CanPort0(0, _500K, _500K, MCAN_MODE_CAN);
-cCAN_CANFD CanPort1(1, _500K, _500K, MCAN_MODE_CAN);
-BOOL bit,passFail;
-UINT32 count, prevCount, ticks, uSecs, prevRxCtr0,prevRxCtr1;
-UINT8 i, x;
-
-// the setup function runs once when you press reset or power the board
-void setup() 
-    {
-    // initialize digital pin LED_BUILTIN as an output.
-    pinMode(28, OUTPUT);
-    
-    pinMode(3, OUTPUT);
-    digitalWrite(3, LOW);
-    
-    Serial.begin(115200);
-    Serial.println("system reset");
-  
-     
-    //start CAN hardware
-    CanPort0.Initialize();
-    CanPort0.setFiltRxAll();
-
-    //start CAN hardware
-    CanPort1.Initialize();
-    CanPort1.setFiltRxAll();
-    }
-
-// the loop function runs over and over again forever
 void loop() 
 {
-         //just sit here and look for messages, fire our new function below (callback) when registered ID recieved
+         //note this code is just a polling example, not optimized for interrupt driven performance
+         //poll for messages on ports
          CanPort0.RxMsgs();
          CanPort1.RxMsgs();
 
@@ -191,7 +154,6 @@ void loop()
              //send all messages RX on CAN 1, and including moodified message
              CanPort0.TxMsg(&CanPort1.rxMsgs[i]);
          }
-
 }
 ```
 Note, as used in CANTerm, if alot of messages are expected, the following macro can be used to increase the reception buffer size **#define MAX_NUM_RXFRAMES  64**
