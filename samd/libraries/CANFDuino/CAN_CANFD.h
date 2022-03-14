@@ -249,7 +249,13 @@ public:
     void TxMsg(cCANTXFrame *I);
 
     /**
-     * This method is meant to be called in a polling loop to deque frames
+    * This method is designed for repeating received frames
+    * 
+    * @return 
+    */
+    void TxMsg(RX_QUEUE_FRAME *I);
+
+    /** This method is meant to be called in a polling loop to deque frames
      * 
      * @return 
      */

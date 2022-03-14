@@ -202,6 +202,13 @@ void cCAN_CANFD::TxMsg(cCANTXFrame *I)
     mcan_enqueue_outgoing_msg(&set, I->id, I->len, I->data); 
 }
 
+//send a message just recieved
+void cCAN_CANFD::TxMsg(RX_QUEUE_FRAME *I)
+{
+    mcan_enqueue_outgoing_msg(&set, I->rxMsgInfo.id, I->rxMsgInfo.data_len, I->rxMsgInfo.data); 
+}
+
+
 //poll for rx message, pull them out into local rxMsgInfo array
 void cCAN_CANFD::RxMsgs()
 {
