@@ -30,6 +30,22 @@ Tested on 2020 Mazda3 on 5/31/2021
 //create the CANport acqisition schedulers
 cCAN_CANFD CanPort0(0, _500K, _500K, MCAN_MODE_CAN);
 
+
+//Chromebrowser-> Serial Terminal https://googlechromelabs.github.io/serial-terminal/ 
+//MACRO's for Terminal Commands                                                                                                                                             
+//Example: ESC[4;9f moves the cursor to line 4, column 9.
+//ESC[K - Erase Line: Clears all characters from the cursor position to the end of the line (including the character at the cursor position). 
+#define CLEAR_SCREEN Serial.write(27);     Serial.print("[2J");    Serial.write(27);    Serial.print("[H")     
+#define INVISCURSOR  Serial.write(27);     Serial.print("[?25l");     
+#define CLEAR_LINE   Serial.write(27);     Serial.print("[2K")   
+#define GOLINE(x)    Serial.write(27);     Serial.print("[" + String(x, DEC) + ";0f")
+#define GREENFORE    Serial.write(27);     Serial.print("[32m")
+#define YELLOWFORE   Serial.write(27);     Serial.print("[33m")
+#define BLUEFORE     Serial.write(27);     Serial.print("[36m")
+#define WHITEFORE    Serial.write(27);     Serial.print("[37m")
+#define CLEAR_SCREEN Serial.write(27);     Serial.print("[2J");    Serial.write(27);    Serial.print("[H")     
+
+
 /***** DEFINITIONS FOR OBD MESSAGES ON CAN PORT 0, see https://en.wikipedia.org/wiki/OBD-II_PIDs to add your own ***************/
 //char _name[10], char _units[10], OBD_PID pid,  uint8_t OBD_PID_SIZE size, bool _signed, OBD_MODE_REQ mode, float32 slope, float32 offset, cAcquireCAN *, extended ID;
 
@@ -101,6 +117,8 @@ void setup()
     //print out our latest OBDII data
 void LogScreen()
 {
+    CLEAR_SCREEN;
+    GOLINE(1);
     Serial.print(OBD_Speed.getName()); 
     Serial.print(OBD_Speed.getData());
     Serial.println(OBD_Speed.getUnits());   
