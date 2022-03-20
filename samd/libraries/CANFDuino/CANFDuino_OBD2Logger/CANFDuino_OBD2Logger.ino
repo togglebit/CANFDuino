@@ -117,8 +117,10 @@ void setup()
     //print out our latest OBDII data
 void LogScreen()
 {
+    //comment next two lines out if not using chrome terminal or PUTTY terminal
     CLEAR_SCREEN;
     GOLINE(1);
+    
     Serial.print(OBD_Speed.getName()); 
     Serial.print(OBD_Speed.getData());
     Serial.println(OBD_Speed.getUnits());   
