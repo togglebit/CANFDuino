@@ -14,9 +14,7 @@
 
 
 /*
-This is an example of how one could "gateway" a message from one port to another. In this example we listen to all messages on CANport0, looking specficially for message 0x100. 
-When we recieve 0x100, we modify it's contents, and re-transmit this on CANport1
-
+This is an example of how one could "gateway" a message from one port to another while passing all other messages through
 */
 
 
@@ -57,10 +55,10 @@ void setup()
     CanPort1.setFiltRxAll();
     }
 
-// the loop function runs over and over again forever
 void loop() 
 {
-         //just sit here and look for messages, fire our new function below (callback) when registered ID recieved
+         //note this code is just a polling example, not optimized for interrupt driven performance
+         //poll for messages on ports
          CanPort0.RxMsgs();
          CanPort1.RxMsgs();
 
@@ -91,5 +89,4 @@ void loop()
              //send all messages RX on CAN 1, and including moodified message
              CanPort0.TxMsg(&CanPort1.rxMsgs[i]);
          }
-
 }
