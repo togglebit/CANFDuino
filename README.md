@@ -176,6 +176,9 @@ cOBDParameter OBD_MAF(        "MAF "          , " grams/s",  ENGINE_MAF  , _16BI
 cOBDParameter OBD_IAT(        "IAT "          , " C"      ,  ENGINE_IAT  , _8BITS,   false ,  CURRENT,  1,    -40,  &CanPort0, false);
 ```
 
+## CANFDuino_OBD2LoggerBLU.ino
+This is the same function as the OBD2 logger except we wire an RN-42 UART based bluetooth module in the prototyping area to Serial2. This enables a visual display of the OBD2 data on a paired Bluetooth device such as a phone or a tablet. In this case we use and Android phone and a "Serial Bluetooh Terminal" app developed by [http://www.kai-morich.de/android/} (Kai Morich) you can find in the google play store. 
+
 ## Analog to CAN 
 
 ***CANFDuino_Analog2CAN.ino***
