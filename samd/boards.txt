@@ -14,7 +14,6 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-
 # CANFDUINO
 CANFDuino.name=CANFDuino
 CANFDuino.vid.0=0x0403
@@ -52,4 +51,44 @@ CANFDuino.build.serialcom_wire=ONE_WIRE
 CANFDuino.build.serialcom_spi=ONE_SPI
 CANFDuino.build.usbcom=USB_DISABLED
 CANFDuino.build.pid=0x0856
+
+
+# CANFDUINO
+CANFDuino17A.name=CANFDuino17A
+CANFDuino17A.vid.0=0x0403
+CANFDuino17A.pid.0=0x6015
+CANFDuino17A.vid.1=0x10C4
+CANFDuino17A.pid.1=0xEA60
+CANFDuino17A.build.usb_manufacturer="Togglebit"
+CANFDuino17A.build.board=SAMD_ZERO
+CANFDuino17A.build.core=arduino
+CANFDuino17A.build.variant=CANFDuino
+CANFDuino17A.build.variant_system_lib=
+CANFDuino17A.build.vid=0x16D0
+CANFDuino17A.upload.protocol=sam-ba
+CANFDuino17A.bootloader.tool=arduino:openocd
+CANFDuino17A.build.floatconfig=FLOAT_BOTH_DOUBLES_ONLY
+CANFDuino17A.build.buildconfig=CONFIG_H_DISABLED
+CANFDuino17A.build.clockconfig=CLOCKCONFIG_INTERNAL
+CANFDuino17A.build.timerconfig=TIMER_732Hz
+CANFDuino17A.upload.maximum_size=253952
+CANFDuino17A.upload.native_usb=false
+CANFDuino17A.build.mcu=cortex-m0plus
+CANFDuino17A.build.mathlib=arm_cortexM0l_math
+CANFDuino17A.build.f_cpu=48000000L
+CANFDuino17A.build.usb_product="CANFDuino17A"
+CANFDuino17A.build.extra_flags=-D__SAMC21G17A__ -DARM_MATH_CM0PLUS
+CANFDuino17A.build.ldscript=flash_128KB.ld
+CANFDuino17A.build.openocdscript=openocd_scripts/SAMC21G17A.cfg
+CANFDuino17A.build.bootloader_size=__8KB_BOOTLOADER__
+CANFDuino17A.build.ldscript_path=linker_scripts/gcc/8KB_Bootloader
+CANFDuino17A.upload.tool=CANFDuino:bossac
+CANFDuino17A.upload.use_1200bps_touch=true
+CANFDuino17A.upload.wait_for_upload_port=true
+CANFDuino17A.build.serialcom_uart=THREE_UART
+CANFDuino17A.build.serialcom_wire=ONE_WIRE
+CANFDuino17A.build.serialcom_spi=ONE_SPI
+CANFDuino17A.build.usbcom=USB_DISABLED
+CANFDuino17A.build.pid=0x0856
+
 
