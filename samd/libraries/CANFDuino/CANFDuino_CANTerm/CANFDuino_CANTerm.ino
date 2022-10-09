@@ -15,8 +15,13 @@
 
 //set the maximum number of RX frames for CAN controller (maxed out at 64)
 //set the max number of RXID's to print to screen per port (will probably run out of lines first)
-#define MAX_NUM_RXFRAMES  64
-#define MAX_NUM_ID       200
+//17A processor
+#define MAX_NUM_RXFRAMES  16
+#define MAX_NUM_ID       50
+
+//18A processor
+//#define MAX_NUM_RXFRAMES  64
+//#define MAX_NUM_ID       200
 #include <CAN_CANFD.h>
 #include <compiler.h>
 #include <mcan.h>
