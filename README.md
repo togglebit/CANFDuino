@@ -47,8 +47,33 @@ cp -r * /home/disdi/Downloads/arduino-1.8.14/hardware/CANFDuino/tools/bossac/CAN
 
 ## CAN/CANFD Packet Monitoring
 
-***CANFduino_CANTerm.ino***
+***CANFduino_SavvyCAN.ino***
 
+**SavvyCAN** is the awesome open source [CAN bus tool](https://www.savvycan.com/) developed by [Collin Kidder](https://github.com/collin80/SavvyCAN). Programing the CANFDuino with this sketch will make it emulate an Arduino DUE board that is supported by SavvyCAN. This sketch has been tested for sniffing and transmission on both ports, with all settings getting saved into flash. 
+
+**Steps for using SavvyCAN with CANFduino**
+
+**Step 1.** - Do everything above in getting started section to make sure yoru hardware works. Hook up the CAN/FD ports to the buss(es) you want to monitor. 
+
+**Step 2.** - Open ArduinoIDE, go to File->Examples->CANFDuino_SavvyCAN.ino
+
+**Step 3.** - Upload it with the IDE and once complete place a jumper on "NO BOOT" pin to bypass the bootloader when the device is reset.
+
+**Step 4.** - Download and install [SavvyCAN] (SavvyCAN.com) for your platform. Watch [Youtube videos](https://www.youtube.com/watch?v=kdA5Gdf3FAk) on how to use SavvyCAN.
+
+**Step 5.** - In SavvyCAN open the connection window, click "add new device connection" select "serial connection" you should see a COM port present corresponding to the CANFduino, click "create new connection".  
+
+**Step 6.** - From the connections settings window, select "enable console" to see the serial traffic including the heartbeat.   
+
+**Step 7.** -  For CAN0 and CAN1 shown in the bottom tabs select "enable bus" and select the baud rate you wish to monitor from the drop down list.
+
+**Step 8.** - Select "reset selected device" to reset the CANFDuino with the new baud rates. The baud rates will now be remembered and you do not need to reprogram the device each time you want to use SavvyCAN. If you are connected to a bus, you should see packets coming in the serial window, close this window to see the bus traffic in the main window.
+
+**Step 9.** - If you have not connected to a bus, remember to set your termination jumpers on the CANFDuino, see the [wiring guide here](https://togglebit.net/2021/07/22/how-to-properly-wire-a-can-bus/)
+
+When in doubt, power all other devices on the network down, open the connection window, make sure the bus is enabled, watch the serial console, and reset the device if needed (e.g. CAN bus goes into bus off state).
+
+***CANFduino_CANTerm.ino***
 
 ![Image](https://togglebit.net/wp-content/uploads/2022/02/GoodCANTerm.gif)
 
