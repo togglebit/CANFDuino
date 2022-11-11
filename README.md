@@ -59,7 +59,7 @@ cp -r * /home/disdi/Downloads/arduino-1.8.14/hardware/CANFDuino/tools/bossac/CAN
 
 **Step 3.** - Upload it with the IDE and once complete place a jumper on "NO BOOT" pin to bypass the bootloader when the device is reset.
 
-**Step 4.** - Download and install [SavvyCAN] (SavvyCAN.com) for your platform. Watch [Youtube videos](https://www.youtube.com/watch?v=kdA5Gdf3FAk) on how to use SavvyCAN.
+**Step 4.** - Download and install [SavvyCAN](SavvyCAN.com) for your platform. Watch [Youtube videos](https://www.youtube.com/watch?v=kdA5Gdf3FAk) on how to use SavvyCAN.
 
 **Step 5.** - In SavvyCAN open the connection window, click "add new device connection" select "serial connection" you should see a COM port present corresponding to the CANFduino, click "create new connection".  
 
