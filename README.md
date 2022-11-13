@@ -48,7 +48,7 @@ cp -r * /home/disdi/Downloads/arduino-1.8.14/hardware/CANFDuino/tools/bossac/CAN
 ## CAN/CANFD Packet Monitoring
 
 ***CANFduino_SavvyCAN.ino***
-
+![Image](https://togglebit.net/wp-content/uploads/2022/09/CANBusCApture-1.png)
 ![Image](https://togglebit.net/wp-content/uploads/2022/11/SavvyCAN.gif)
 
 **SavvyCAN** is the awesome open source [CAN bus tool](https://www.savvycan.com/) developed by [Collin Kidder](https://github.com/collin80/SavvyCAN). Programing the CANFDuino with this sketch will make it emulate an Arduino DUE board that is supported by SavvyCAN. This sketch has been tested for sniffing and transmission on both ports, with all settings getting saved into flash. 
