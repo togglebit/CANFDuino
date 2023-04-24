@@ -60,10 +60,23 @@ void cCAN_CANFD::setBaud(CAN_BAUD_RATE std, CAN_BAUD_RATE fd, MCAN_MODE cMode )
     cfg.quanta_after_sp = 3 + 1;
     cfg.quanta_sync_jump = 3 + 1;
 
-    cfg.bit_rate_fd = fd;
-    cfg.quanta_before_sp_fd = 10 + 2;
-    cfg.quanta_after_sp_fd = 3 + 1;
-    cfg.quanta_sync_jump_fd = 3 + 1;
+    //if over 5MB adjust time quanta
+    if (fd ==_5M)
+    {
+        cfg.bit_rate_fd = fd;
+        cfg.quanta_before_sp_fd = 7 + 2;
+        cfg.quanta_after_sp_fd =  1;
+        cfg.quanta_sync_jump_fd = 3 + 1;
+
+    } else
+    {
+        cfg.bit_rate_fd = fd;
+        cfg.quanta_before_sp_fd = 10 + 2;
+        cfg.quanta_after_sp_fd = 3 + 1;
+        cfg.quanta_sync_jump_fd = 3 + 1;
+
+    }
+
 
     //set mode
     mode = cMode;
@@ -168,31 +181,31 @@ void cCAN_CANFD::TxMsgs(TX_MODE mode)
 
     switch (mode)
     {
-    case NEXT_MSG:
+        case NEXT_MSG:
 
-        //send single next message
-        mcan_enqueue_outgoing_msg(&set, txFrames[nxtTxFrame]->id, txFrames[nxtTxFrame]->len, txFrames[nxtTxFrame]->data); 
+            //send single next message
+            mcan_enqueue_outgoing_msg(&set, txFrames[nxtTxFrame]->id, txFrames[nxtTxFrame]->len, txFrames[nxtTxFrame]->data); 
 
-        //go to next frame
-        nxtTxFrame = nxtTxFrame < numTxFrames - 1 ? nxtTxFrame + 1 : 0; 
-
-        //increment TX counter
-        txCntr += 1;
-
-        break;
-
-    case ALL_MSGS:
-
-        //send 'em all
-        for (i = 0; i < numTxFrames; i++)
-        {
-            mcan_enqueue_outgoing_msg(&set, txFrames[i]->id, txFrames[i]->len, txFrames[i]->data); 
+            //go to next frame
+            nxtTxFrame = nxtTxFrame < numTxFrames - 1 ? nxtTxFrame + 1 : 0; 
 
             //increment TX counter
             txCntr += 1;
-        }
 
-        break;
+            break;
+
+        case ALL_MSGS:
+
+            //send 'em all
+            for (i = 0; i < numTxFrames; i++)
+            {
+                mcan_enqueue_outgoing_msg(&set, txFrames[i]->id, txFrames[i]->len, txFrames[i]->data); 
+
+                //increment TX counter
+                txCntr += 1;
+            }
+
+            break;
     }
 }
 
@@ -213,36 +226,36 @@ void cCAN_CANFD::TxMsg(RX_QUEUE_FRAME *I)
 void cCAN_CANFD::RxMsgs()
 {
     UINT8 i,x;
-    
-        //see how many messages have been received by the buffer, pull them out and stuff them into local class copy
-        numRxMsgs = mcan_dequeue_received_msg(&set, fifoNum , &rxMsgs[0].rxMsgInfo);
-    
-        //increment RX counter                      
-        rxCntr += numRxMsgs;
-                                                                    
-        //more than one message dequeue the rest
-        if (numRxMsgs > 1 )
-        {
 
-            digitalWrite(4,HIGH); 
-            for (i=1; (i < numRxMsgs) && (i < MAX_NUM_RXFRAMES); i++)
+    //see how many messages have been received by the buffer, pull them out and stuff them into local class copy
+    numRxMsgs = mcan_dequeue_received_msg(&set, fifoNum , &rxMsgs[0].rxMsgInfo);
+
+    //increment RX counter                      
+    rxCntr += numRxMsgs;
+
+    //more than one message dequeue the rest
+    if (numRxMsgs > 1)
+    {
+
+        digitalWrite(4,HIGH); 
+        for (i=1; (i < numRxMsgs) && (i < MAX_NUM_RXFRAMES); i++)
+        {
+            mcan_dequeue_received_msg(&set, fifoNum , &rxMsgs[i].rxMsgInfo);
+        }
+    }
+
+    //fire callbacks to any higher-level protocols (OBD2) if any are registered through addRXmessages
+    for (i=0; i< numRxFrames; i++)
+    {
+        for (x=0; x<numRxMsgs; x++)
+        {
+            //if this is the message that is registered, fire it's callback
+            if (rxFrames[i]->rxMsgInfo.id ==  rxMsgs[x].rxMsgInfo.id)
             {
-                mcan_dequeue_received_msg(&set, fifoNum , &rxMsgs[i].rxMsgInfo);
+                rxFrames[i]->CallbackRx(&rxMsgs[x]);
             }
         }
-
-        //fire callbacks to any higher-level protocols (OBD2) if any are registered through addRXmessages
-        for (i=0; i< numRxFrames; i++)
-        {
-            for (x=0; x<numRxMsgs; x++)
-            {
-                //if this is the message that is registered, fire it's callback
-                if (rxFrames[i]->rxMsgInfo.id ==  rxMsgs[x].rxMsgInfo.id)
-                {
-                    rxFrames[i]->CallbackRx(&rxMsgs[x]);
-                }
-            }
-        }
+    }
 
 
 
@@ -260,7 +273,7 @@ void cCAN_CANFD::RxMsgs()
 
     }
 #endif
-    
+
 
 
     digitalWrite(4,LOW); 

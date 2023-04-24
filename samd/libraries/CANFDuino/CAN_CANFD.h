@@ -76,7 +76,7 @@
  */
 enum CAN_BAUD_RATE
 {
-    _10M    = 10000000,
+    _10M    = 10000000,  //this baud is not tested or supported yet
     _5M     = 5000000,
     _1M     = 1000000,
     _500K   = 500000,
