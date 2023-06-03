@@ -70,12 +70,7 @@ void cCAN_CANFD::setBaud(CAN_BAUD_RATE std, CAN_BAUD_RATE fd, MCAN_MODE cMode )
         cfg.quanta_after_sp_fd =  1+1;
         cfg.quanta_sync_jump_fd = 3+1;  
         
-        //cfg.bit_rate_fd = fd;
-        //cfg.quanta_before_sp_fd = 7;
-        //cfg.quanta_after_sp_fd =  1;
-        //cfg.quanta_sync_jump_fd = 3;  
-
-        
+            
     } else if (fd == _2M)
     {
     

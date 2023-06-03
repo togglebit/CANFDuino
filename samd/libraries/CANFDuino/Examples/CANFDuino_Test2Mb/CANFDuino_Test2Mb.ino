@@ -12,7 +12,7 @@
   License along with this library; if not, write to the Free Software
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
-//this is a simple example of using CANFD at 5MBps Rate, sending data from one port to another. Open terminal to determine if it's working.
+//this is a simple example of using CANFD at 2MBps Rate, sending data from one port to another. Open terminal to determine if it's working.
 
 #include <CAN_CANFD.h>
 #include <compiler.h>
@@ -20,8 +20,8 @@
 #include <mcan_helper.h>
 #include <typedef.h>
 
-cCAN_CANFD CanPort0(0, _1M, _5M, MCAN_MODE_EXT_LEN_DUAL_RATE);
-cCAN_CANFD CanPort1(1, _1M, _5M, MCAN_MODE_EXT_LEN_DUAL_RATE);
+cCAN_CANFD CanPort0(0, _500K, _2M, MCAN_MODE_EXT_LEN_DUAL_RATE);
+cCAN_CANFD CanPort1(1, _500K, _2M, MCAN_MODE_EXT_LEN_DUAL_RATE);
 cCANTXFrame tx1;
 cCANTXFrame tx2;
 BOOL bit,passFail;
