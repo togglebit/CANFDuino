@@ -53,7 +53,6 @@ cCAN_CANFD::cCAN_CANFD(UINT8 _portNumber, CAN_BAUD_RATE bitRateSTD, CAN_BAUD_RAT
 }
 void cCAN_CANFD::setBaud(CAN_BAUD_RATE std, CAN_BAUD_RATE fd, MCAN_MODE cMode )
 {
-
     //(see SAMC21 app note) the plus values are to add on what the MCAN driver subtracts back off
     cfg.bit_rate = std;
     cfg.quanta_before_sp = 10 + 2;
@@ -61,24 +60,47 @@ void cCAN_CANFD::setBaud(CAN_BAUD_RATE std, CAN_BAUD_RATE fd, MCAN_MODE cMode )
     cfg.quanta_sync_jump = 3 + 1;
 
     //if over 5MB adjust time quanta
+    
     if (fd ==_5M)
     {
+    
+        //PCAN Peak adapter setting -  5MB adjust time quanta 62.5% sample point, 80Mhz 8 time quanta,TSEG1 = 4, TSEG2 = 3, prescale 2, jump =3
         cfg.bit_rate_fd = fd;
-        cfg.quanta_before_sp_fd = 7 + 2;
-        cfg.quanta_after_sp_fd =  1;
-        cfg.quanta_sync_jump_fd = 3 + 1;
+        cfg.quanta_before_sp_fd = 7+2;
+        cfg.quanta_after_sp_fd =  1+1;
+        cfg.quanta_sync_jump_fd = 3+1;  
+        
+        //cfg.bit_rate_fd = fd;
+        //cfg.quanta_before_sp_fd = 7;
+        //cfg.quanta_after_sp_fd =  1;
+        //cfg.quanta_sync_jump_fd = 3;  
 
-    } else
+        
+    } else if (fd == _2M)
     {
+    
+        //(see ATMEL app note TN1346, these values are tested and working for SAEJ2284-4 2MB, 80% sample point jump width 4        
+        cfg.bit_rate_fd = fd;
+        cfg.quanta_before_sp_fd = 17;
+        cfg.quanta_after_sp_fd = 4;
+        cfg.quanta_sync_jump_fd =  cfg.quanta_after_sp_fd;
+
+        
+        
+    }else
+    {
+        //(see SAMC21 app note) the plus values are to add on what the MCAN driver subtracts back off
         cfg.bit_rate_fd = fd;
         cfg.quanta_before_sp_fd = 10 + 2;
         cfg.quanta_after_sp_fd = 3 + 1;
         cfg.quanta_sync_jump_fd = 3 + 1;
 
+        
+        
     }
 
 
-    //set mode
+
     mode = cMode;
 
 }
