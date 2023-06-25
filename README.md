@@ -16,7 +16,7 @@ Note this content can also be found here [https://togglebit.net/getting-started-
 
 **Step 2.** - Close the Arduino IDE if you have it open. Copy the whole "CANFDuino" folder to your local arduino hardware folder. The path for this hardware folder is: C:\Users\YOUR USERNAME\Documents\Arduino\hardware. The whole folder should be pasted directly into the hardware folder creating: C:\Users\YOUR USERNAME\Documents\Arduino\hardware\CANFDuino. If you do not have a hardware folder, create one and place CANFDuino folder inside of it.
 
-**Step 3.** - Open the Arduino IDE, Go to the "Tools->Board->CANFDuino" to select the CANFDuino board as your target board. (If you have a CANFDuino based upon the SAMC21G17A processor, choose "CANFDuino17A")
+**Step 3.** - Open the Arduino IDE, Go to the "Tools->Board->CANFDuino" to select the CANFDuino board as your target board. (If you have a CANFDuino based upon the SAMC21G17A processor, choose "CANFDuino17A". Failing to do so my result in error message "unsupported device")
 
 **Step 4.** - Go to Tools->Board->-Boards Manager-Wait for the downloads to finish. Click on “Arduino SAMD Boards (32-bits ARM Cortex-M3), including Arduino M0” and Install. This can take a while to download if you don't already have the library.
 
