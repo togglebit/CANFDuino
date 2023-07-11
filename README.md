@@ -43,9 +43,9 @@ cp -r * /home/disdi/Downloads/arduino-1.8.14/hardware/CANFDuino/tools/bossac/CAN
 3. Flash the binary directly or via Arduno IDE sudo bossac  --port=ttyUSB0  -e -w -v -b /tmp/CANFDuino_Test500kb.ino.CANFDuino.bin
 
 ***Mac Flashing***
-1. Make sure the mac [https://ftdichip.com/drivers/vcp-drivers/](FTDI driver) is installed to recognize the device, the one included in this repo is for Windows.
+1. Make sure the mac FTDI driver https://ftdichip.com/drivers/vcp-drivers/  is installed to recognize the device, the one included in this repo is for Windows.
 
-2. Download the [https://github.com/shumatech/BOSSA/releases](bossac programming utility for mac) and replace in the path C:\Users\PC\Documents\Arduino\hardware\CANFDuino\tools\bossac\CANFDuinoBossac.
+2. Download the bossac programming utility https://github.com/shumatech/BOSSA/releases  for mac and replace in the path C:\Users\PC\Documents\Arduino\hardware\CANFDuino\tools\bossac\CANFDuinoBossac.
  
 
 # Example Code
