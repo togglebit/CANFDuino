@@ -26,7 +26,7 @@ Note this content can also be found here [https://togglebit.net/getting-started-
 
 **Step 7.** - Jumper at least one of the two termination resistors on the PCB enabling termnination resistors on the bus. (two ideally)
 
-**Step 8.** - Connect USB cable to CANFDuino and the PC, this will power the unit an prompt for a dirver install. Wait for the driver to install if needed (one option is to skip obtaining from windows and selecting the driver in the hardware\samd\drivers folder). Go to Tools->Port and select the COMM port that is labled CANFDuino. You may need to shut down the IDE and re-open it after installing the driver. (if needed, use FTDI exe in this repository to install driver)
+**Step 8.** - Connect USB cable to CANFDuino and the PC, this will power the unit an prompt for a dirver install. Wait for the driver to install if needed (one option is to skip obtaining from Windows and selecting the driver in the hardware\samd\drivers folder). Go to Tools->Port and select the COMM port that is labled CANFDuino. You may need to shut down the IDE and re-open it after installing the driver. (if needed, use FTDI exe in this repository to install driver, see link below for mac)
 
 **Step 9.** - Go to Sketch->Upload. After compiling the IDE will send a signal to the CANFDuino to enter the bootloader. Note when the unit is bootloading the orange LED will stay on and strobe off quickly for 1-2 seconds. This occurs anytime the processor is reset (initial power on etc). You should see the green/red comms LED's flicker during sketch upload.
 
@@ -41,6 +41,12 @@ Note this content can also be found here [https://togglebit.net/getting-started-
 cp -r * /home/disdi/Downloads/arduino-1.8.14/hardware/CANFDuino/tools/bossac/CANFDuinoBossac/
 
 3. Flash the binary directly or via Arduno IDE sudo bossac  --port=ttyUSB0  -e -w -v -b /tmp/CANFDuino_Test500kb.ino.CANFDuino.bin
+
+***Mac Flashing***
+1. Make sure the mac [https://ftdichip.com/drivers/vcp-drivers/](FTDI driver) is installed to recognize the device, the one included in this repo is for Windows.
+
+2. Download the [https://github.com/shumatech/BOSSA/releases](bossac programming utility for mac) and replace in the path C:\Users\PC\Documents\Arduino\hardware\CANFDuino\tools\bossac\CANFDuinoBossac.
+ 
 
 # Example Code
 [All example sketches are found here](https://github.com/togglebit/CANFDuino/tree/master/samd/libraries/CANFDuino). If you have followed the instructions above, all of the examples below are found locally on your machine in the C:\Users\YOUR USERNAME\Documents\Arduino\hardware\CANFDuino\samd\libraries\CANFDuino folder. This can also be accessed in the IDE by going to File->Examples->CANFDuino->.
