@@ -8,7 +8,7 @@ CANFDuino is the best platform for open source CAN bus Arduino projects. It comb
 For making connections the **hookup guide** is here: [https://togglebit.net/canfduino-hookup-guide/](https://togglebit.net/canfduino-hookup-guide/)
 
 ## Installing the Library and First Sketch
-The following are steps for installing and testing CANFDuino support for the Arduino IDE, running and testing your first CAN sketch:
+The following are steps for installing and testing CANFDuino support for the Arduino IDE (UPDATE test with 2.2.1), running and testing your first CAN sketch:
 
 Note this content can also be found here [https://togglebit.net/getting-started-with-canfduino/](https://togglebit.net/getting-started-with-canfduino/)
 
