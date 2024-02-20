@@ -419,7 +419,7 @@ void setBaudRates(UINT8 portNum)
         break;
 
     case 2:
-        fdBaud =   _1M; 
+        fdBaud =   _2M; 
         break;
 
     case 3:
@@ -454,7 +454,7 @@ void CAN_FDBaudRate(UINT8 portNum)
     CAN_BAUD_RATE fdBaud;
     String response,question, port;
     port =  portNum ==0 ? String("CAN 0") : String("CAN 1");
-    question =  port + String(" CANFD BaudRate (number then enter): 0 - NONE/OFF   1 - 5M   2 - 1M   3 - 500k: ");
+    question =  port + String(" CANFD BaudRate (number then enter): 0 - NONE/OFF   1 - 5M   2 - 2M   3 - 500k: ");
     response = ShowMenu(&question);    
     
     //storeFD baud rate settings
