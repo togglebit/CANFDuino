@@ -52,6 +52,7 @@ Atmel's SAMC21 register definition include files have a different and peculiar s
 
 #include "typedef.h"
 #include <assert.h>
+#include <Arduino.h>
 
 /* MCAN-related #defines missing from the SAMC21 peripheral definitions */
 #include "mcan_helper.h"
@@ -182,7 +183,7 @@ static inline BOOL mcan_is_enabled(const struct MCAN_SET *set)
 
 static inline BOOL mcan_is_extended_id(UINT32 msg_id)
 {
-	return msg_id & CAN_EXT_MSG_ID ? true : false;
+	return msg_id > 0x7FF ? true : false;
 }
 
 static inline UINT32 mcan_get_id(UINT32 msg_id)

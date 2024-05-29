@@ -51,7 +51,6 @@ Atmel's SAMC21 register definition include files have a different and peculiar s
 
 
 #include "mcan.h"
-
 /*---------------------------------------------------------------------------
  *      Local definitions
  *---------------------------------------------------------------------------*/
@@ -526,9 +525,12 @@ UINT8 * mcan_prepare_tx_buffer(struct MCAN_SET *set, UINT8 buf_idx,
     pThisTxBuf = set->ram_array_tx + buf_idx
                  * (MCAN_RAM_BUF_HDR_SIZE + set->cfg.buf_size_tx / 4);
     if (mcan_is_extended_id(id))
+    {
         *pThisTxBuf++ = MCAN_RAM_BUF_XTD | MCAN_RAM_BUF_ID_XTD(id);
-    else
+    }else
+    {
         *pThisTxBuf++ = MCAN_RAM_BUF_ID_STD(id);
+    }
     val = MCAN_RAM_BUF_MM(0) | MCAN_RAM_BUF_DLC((UINT32)dlc);
     if (mode == MCAN_MODE_EXT_LEN_CONST_RATE)
         val |= MCAN_RAM_BUF_FDF;
@@ -552,6 +554,7 @@ void mcan_send_tx_buffer(struct MCAN_SET *set, UINT8 buf_idx)
 UINT8 mcan_enqueue_outgoing_msg(struct MCAN_SET *set, UINT32 id,
                                 UINT8 len, const UINT8 *data)
 {
+
     assert(len <= set->cfg.buf_size_tx);
 
     Can *mcan = set->cfg.regs;
@@ -568,18 +571,22 @@ UINT8 mcan_enqueue_outgoing_msg(struct MCAN_SET *set, UINT32 id,
         return putIdx;
     putIdx = (UINT8)((mcan->TXFQS.reg & CAN_TXFQS_TFQPI_Msk)
                      >> CAN_TXFQS_TFQPI_Pos);
-    pThisTxBuf = set->ram_array_tx + (UINT32)
-                 putIdx * (MCAN_RAM_BUF_HDR_SIZE + set->cfg.buf_size_tx / 4);
+    pThisTxBuf = set->ram_array_tx + (UINT32)putIdx * (MCAN_RAM_BUF_HDR_SIZE + set->cfg.buf_size_tx / 4);
+    
     if (mcan_is_extended_id(id))
         *pThisTxBuf++ = MCAN_RAM_BUF_XTD | MCAN_RAM_BUF_ID_XTD(id);
     else
         *pThisTxBuf++ = MCAN_RAM_BUF_ID_STD(id);
+    
     val = MCAN_RAM_BUF_MM(0) | MCAN_RAM_BUF_DLC((UINT32)dlc);
+    
     if (mode == MCAN_MODE_EXT_LEN_CONST_RATE)
         val |= MCAN_RAM_BUF_FDF;
     else if (mode == MCAN_MODE_EXT_LEN_DUAL_RATE)
         val |= MCAN_RAM_BUF_FDF | MCAN_RAM_BUF_BRS;
+    
     *pThisTxBuf++ = val;
+    
     memcpy(pThisTxBuf, data, len);
     /* enable transmit from buffer to set TC interrupt bit in IR,
      * but interrupt will not happen unless TC interrupt is enabled
