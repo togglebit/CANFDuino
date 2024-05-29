@@ -51,7 +51,7 @@ cp -r * /home/disdi/Downloads/arduino-1.8.14/hardware/CANFDuino/tools/bossac/CAN
 # Example Code
 [All example sketches are found here](https://github.com/togglebit/CANFDuino/tree/master/samd/libraries/CANFDuino). If you have followed the instructions above, all of the examples below are found locally on your machine in the C:\Users\YOUR USERNAME\Documents\Arduino\hardware\CANFDuino\samd\libraries\CANFDuino folder. This can also be accessed in the IDE by going to File->Examples->CANFDuino->.
 
-## CAN/CANFD Packet Monitoring
+## CAN Packet Monitoring
 
 ***CANFduino_SavvyCAN.ino***
 ![Image](https://togglebit.net/wp-content/uploads/2022/09/CANBusCApture-1.png)
@@ -80,6 +80,28 @@ cp -r * /home/disdi/Downloads/arduino-1.8.14/hardware/CANFDuino/tools/bossac/CAN
 **Step 9.** - If you have not connected to a bus, remember to set your termination jumpers on the CANFDuino, see the [wiring guide here](https://togglebit.net/2021/07/22/how-to-properly-wire-a-can-bus/)
 
 When in doubt, power all other devices on the network down, open the connection window, make sure the bus is enabled, watch the serial console, and reset the device if needed (e.g. CAN bus goes into bus off state).
+
+**For a CANFD bus, use these steps**
+
+**Step 1.** - Do everything above in getting started section to make sure yoru hardware works. Hook up the CAN/FD ports to the buss(es) you want to monitor. 
+
+**Step 2.** - Open ArduinoIDE, go to File->Examples->CANFDuino_SavvyCANFD.ino
+
+**Step 3.** - Upload it with the IDE and once complete place a jumper on "NO BOOT" pin to bypass the bootloader when the device is reset.
+
+**OPTIONAL:** -  We did build in a terminal interface for configuring the baud rates for CANFD and traditional CAN. If you want to pre-configure your unit before connecting to SavvyCAN, do NOT place the jumper on the NO BOOT pin and open up the serial monitor window in the ArduinoIDE with a 2MB serial port baud rate, and "carriage return" when pressing enter. Follow the on-screen prompts and type your responses (should only be a single number) followed by the return key until all of the baud rates are set. Now place the "NO BOOT" jumper on and power cycle (unplug USB, plug back in). See below, 2,2,2,2 results in both ports set for 500k/2MB CANFD. This does enable FD rates beyond 2MB.
+![Image](https://togglebit.net/wp-content/uploads/2024/02/image.png)
+
+**Step 4.** - Download our forked version of [SavvyCAN](https://github.com/togglebit/SavvyCAN) from GitHub (Windows supported only right now). The entire codebase can be downloaded, with the windows executable located in the "**release**" folder. Additionally, you can watch [Youtube videos](https://www.youtube.com/watch?v=kdA5Gdf3FAk) on how to use SavvyCAN.
+
+**Step 5.** -In SavvyCAN open the connection window, “Click Add New Device Connection”, select “enable console” to see the serial traffic including the heartbeat, click select “serial connection” and you should see a COM port present corresponding to the CANFduino, select “CAN-FD” checkbox then click “create new connection“. You should see messages confirming data tx/rx over the serial port in the console window. If you precofigured your baud rates and port settings in the Arduino IDE they will appear here. If there are no bau rate sttings, for CAN0 and CAN1 shown in the bottom tabs select “enable bus”, “enable CANFD” and select the standa”rd CAN “speed” and CANFD “baud rate” you wish to monitor from the drop down list. For each bus tab, click”save bus settings” (remember do this for both tabs after you set the bauds etc) then click on the GVRET device and check the status. It may say “connected” but if you may have no traffic in the console window click “reset selected device” to reset the CANFDuino with the new baud rates. The status will change from “not connected” to “connected” and traffic will reappear in the console window (clickclear to ensure there is traffic). The baud rates will now be remembered and you do not need to reprogram the device baud settings each time you want to use SavvyCAN. If you are connected to a bus, you should see packets coming in the serial window, close this window to see the bus traffic in the main window.
+
+**Step 6.** -Ok now that we are connected time to connect to your CAN bus(s) and start sniffing. Remember you’ll want to understand where the terminations are and observe proper wiring in your network and if you need to enable one on your CANFDuino. You should now see traffic in the main window and the source of that traffic (CAN 0 or CAN 1). Note you will see longer messages on a CANFD bus of up to 64bytes! Really huge props to Collin Kidder for developing such a powerful tool for the community! 
+![Image](https://togglebit.net/wp-content/uploads/2024/02/image-7.png)
+
+When in doubt, power all other devices on the network down, open the connection window, make sure the bus is enabled, watch the serial console, and reset the device if needed (e.g. CAN bus goes into bus off state). You can also reference [this post with step by steps](https://togglebit.net/2024/03/02/sniffing-canfd-with-savvycan-and-canfduino/) 
+
+
 
 ***CANFduino_CANTerm.ino***
 
