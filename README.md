@@ -37,9 +37,9 @@ Note this content can also be found here [https://togglebit.net/getting-started-
 ***Ubuntu Flashing***
 1. download: https://www.mattairtech.com/software/arduino/Bossa-1.7.0-mattairtech-2-x86_64-linux-gnu.tar.gz
 
-or try the linux-gnu here:
+or try the bossac executable here for Linux x86:
 
-https://github.com/shumatech/BOSSA/releases/tag/1.7.0
+https://github.com/togglebit/CANFDuino/tree/master/tools/bossac
 
 2. Extract and copy bossac and other binaries to installation path of bossac CANFDUINO Arduino Studio project path -
 cp -r * /home/disdi/Downloads/arduino-1.8.14/hardware/CANFDuino/tools/bossac/CANFDuinoBossac/
