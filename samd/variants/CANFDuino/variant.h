@@ -263,26 +263,6 @@ static const uint8_t ATN = PIN_ATN;
 
 #define SERCOM_INSTANCE_SERIAL3       &sercom3
 
-/*
- * Wire Interfaces
- */
-#if defined(TWO_WIRE)
-#define WIRE_INTERFACES_COUNT 2
-#elif defined(THREE_WIRE)
-#define WIRE_INTERFACES_COUNT 3
-#else
-#define WIRE_INTERFACES_COUNT 1
-#endif
-
-
-//tested working with arduino DUE slave
-#define PIN_WIRE_SDA         (8u)
-#define PIN_WIRE_SCL         (9u)
-#define PERIPH_WIRE          sercom2
-#define WIRE_IT_HANDLER      SERCOM2_Handler
-
-static const uint8_t SDA = PIN_WIRE_SDA;
-static const uint8_t SCL = PIN_WIRE_SCL;
 ////
 //#define PIN_WIRE1_SDA         (16u)
 //#define PIN_WIRE1_SCL         (17u)
@@ -292,18 +272,28 @@ static const uint8_t SCL = PIN_WIRE_SCL;
 //static const uint8_t SDA1 = PIN_WIRE1_SDA;
 //static const uint8_t SCL1 = PIN_WIRE1_SCL;
 
+/*
+* Wire Interfaces
+*/
+#if defined(TWO_WIRE)
+    #define WIRE_INTERFACES_COUNT 2
+#elif defined(THREE_WIRE)
+    #define WIRE_INTERFACES_COUNT 3
+#else
+    #define WIRE_INTERFACES_COUNT 1
+#endif
 
 /*
  * SPI Interfaces
  */
 #if defined(TWO_SPI)
-#define SPI_INTERFACES_COUNT 2
+    #define SPI_INTERFACES_COUNT 2
 #elif defined(THREE_SPI)
-#define SPI_INTERFACES_COUNT 3
+    #define SPI_INTERFACES_COUNT 3
 #elif defined(ONE_SPI)
-#define SPI_INTERFACES_COUNT 1
+#   define SPI_INTERFACES_COUNT 1
 #else
-#define SPI_INTERFACES_COUNT 1
+    #define SPI_INTERFACES_COUNT 1
 #endif
 
 //tested working with SD card
@@ -335,7 +325,52 @@ static const uint8_t MOSI1 = PIN_SPI1_MOSI ;
 static const uint8_t MISO1 = PIN_SPI1_MISO ;
 static const uint8_t SCK1  = PIN_SPI1_SCK ;
 
+#if defined(THREE_SPI)
 
+     #define PIN_SPI2_MOSI         (8u)
+     #define PIN_SPI2_MISO         (10u)
+     #define PIN_SPI2_SCK          (9u)
+     #define PIN_SPI2_SS           (11u)
+     #define PAD_SPI2_TX           SPI_PAD_0_SCK_1//tx on 8, clock on 9   
+     #define PAD_SPI2_RX           SERCOM_RX_PAD_2//rx on 10  
+     #define PERIPH_SPI2           sercom2
+
+     static const uint8_t SS2   = PIN_SPI2_SS ;	// The SERCOM SS PAD is available on this pin but HW SS isn't used. Set here only for reference.
+     static const uint8_t MOSI2 = PIN_SPI2_MOSI ;
+     static const uint8_t MISO2 = PIN_SPI2_MISO ;
+     static const uint8_t SCK2  = PIN_SPI2_SCK ;
+
+ 
+#else
+     /*
+      * I2S Interfaces
+      * SAMD51, PDM, and MCLK support will be added hopefully March 2018
+      */
+
+     //tested working with arduino DUE slave
+     #define PIN_WIRE_SDA         (8u)
+     #define PIN_WIRE_SCL         (9u)
+     #define PERIPH_WIRE          sercom2
+     #define WIRE_IT_HANDLER      SERCOM2_Handler
+
+     static const uint8_t SDA = PIN_WIRE_SDA;
+     static const uint8_t SCL = PIN_WIRE_SCL;
+
+
+     #define I2S_INTERFACES_COUNT  1
+     #define I2S_DEVICE            0
+     //#define I2S1_DEVICE           1
+     #define I2S_CLOCK_GENERATOR   7
+     //#define I2S1_CLOCK_GENERATOR  8
+     //#define PIN_I2S_MCK         (9u)
+     #define PIN_I2S_SCK         (20u)
+     #define PIN_I2S_FS          (21u)
+     #define PIN_I2S_SD          (19u)
+     //#define PIN_I2S1_MCK         (10u)
+     //#define PIN_I2S1_SCK         (11u)
+     //#define PIN_I2S1_SD          (8u)
+
+#endif
 
 /*
  * USB - Define PIN_USB_HOST_ENABLE to assert the defined pin to
@@ -346,23 +381,6 @@ static const uint8_t SCK1  = PIN_SPI1_SCK ;
 //#define PIN_USB_HOST_ENABLE             (19ul)
 #define PIN_USB_HOST_ENABLE_VALUE	0
 
-/*
- * I2S Interfaces
- * SAMD51, PDM, and MCLK support will be added hopefully March 2018
- */
-
-#define I2S_INTERFACES_COUNT  1
-#define I2S_DEVICE            0
-//#define I2S1_DEVICE           1
-#define I2S_CLOCK_GENERATOR   7
-//#define I2S1_CLOCK_GENERATOR  8
-//#define PIN_I2S_MCK         (9u)
-#define PIN_I2S_SCK         (20u)
-#define PIN_I2S_FS          (21u)
-#define PIN_I2S_SD          (19u)
-//#define PIN_I2S1_MCK         (10u)
-//#define PIN_I2S1_SCK         (11u)
-//#define PIN_I2S1_SD          (8u)
 
 #ifdef __cplusplus
 }
