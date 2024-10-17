@@ -254,9 +254,9 @@ This example reads the 8 byte contents of message 0x100 and drives 8 PWM outputs
 
 ## CAN/CANFD Testing 
 
-***CANFDuino_Test500kb.ino, CANFDuino_Test2Mb.ino***
+***CANFDuino_Test500kb.ino, CANFDuino_Test2Mb.ino, CANFDuino_TimerTx.ino***
 
-These are the sketches used in the getting started. With CAN0 and CAN1 wired together, they exchange messages to verify functionality and the outcome is printed to the serial monitor. The 500KBaud sketch uses standard CAN, the 2MB sketch uses CANFD.
+These are the sketches used in the getting started. With CAN0 and CAN1 wired together, they exchange messages to verify functionality and the outcome is printed to the serial monitor. The 500KBaud sketch uses standard CAN, the 2MB sketch uses CANFD. TimerTx shows a periodic tranmission using a SAMC21 timer.
 
 ## IO Testing 
 
