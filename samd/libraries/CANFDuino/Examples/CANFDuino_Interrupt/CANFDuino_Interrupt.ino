@@ -22,6 +22,7 @@
 #include <SAMC21Timer.h>
 bool blinker;
 
+//this function will be fired when the fallign edge of digital 18 is detected (ground and un-ground the pin and it will print to screen)
 void toggleStatus()
 {
   digitalWrite(28,HIGH);    
