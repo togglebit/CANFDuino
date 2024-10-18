@@ -270,4 +270,7 @@ These are all very simple test sketches for the basic Arduino analog inputs, dig
 
 These are the simple test functions for the serial interfaces that exist in the Arduino platform. Open the sketches to see the pinout or consult the **"variant.cpp"** file in the CANFDuino\samd\variants\ folder to see the mapping to the arduino IO.
 
+## Interrupts 
+***CANFDuino_TimerTx.ino CANFDuino_Interrupt.ino***
 
+These are the simple test sketches for using a SAMC21 timer as a periodic callback for sending CAN messages (or doing other things) as well as a very simple bare-bones example of a digital input implemented as an external interrupt (note variant.cpp maps the external interrupts themselves to "Arduino" pins which must be referenced against the SAMC21 datasheet for pin mapping).
