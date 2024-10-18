@@ -37,6 +37,10 @@ Note this content can also be found here [https://togglebit.net/getting-started-
 ***Ubuntu Flashing***
 1. download: https://www.mattairtech.com/software/arduino/Bossa-1.7.0-mattairtech-2-x86_64-linux-gnu.tar.gz
 
+or try the bossac executable here for Linux x86:
+
+https://github.com/togglebit/CANFDuino/tree/master/tools/bossac
+
 2. Extract and copy bossac and other binaries to installation path of bossac CANFDUINO Arduino Studio project path -
 cp -r * /home/disdi/Downloads/arduino-1.8.14/hardware/CANFDuino/tools/bossac/CANFDuinoBossac/
 
@@ -250,9 +254,9 @@ This example reads the 8 byte contents of message 0x100 and drives 8 PWM outputs
 
 ## CAN/CANFD Testing 
 
-***CANFDuino_Test500kb.ino, CANFDuino_Test2Mb.ino***
+***CANFDuino_Test500kb.ino, CANFDuino_Test2Mb.ino, CANFDuino_TimerTx.ino***
 
-These are the sketches used in the getting started. With CAN0 and CAN1 wired together, they exchange messages to verify functionality and the outcome is printed to the serial monitor. The 500KBaud sketch uses standard CAN, the 2MB sketch uses CANFD.
+These are the sketches used in the getting started. With CAN0 and CAN1 wired together, they exchange messages to verify functionality and the outcome is printed to the serial monitor. The 500KBaud sketch uses standard CAN, the 2MB sketch uses CANFD. TimerTx shows a periodic tranmission using a SAMC21 timer.
 
 ## IO Testing 
 
