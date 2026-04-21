@@ -94,7 +94,7 @@ When in doubt, power all other devices on the network down, open the connection 
 **Step 3.** - Upload it with the IDE and once complete place a jumper on "NO BOOT" pin to bypass the bootloader when the device is reset.
 
 **OPTIONAL:** -  We did build in a terminal interface for configuring the baud rates for CANFD and traditional CAN. If you want to pre-configure your unit before connecting to SavvyCAN, do NOT place the jumper on the NO BOOT pin and open up the serial monitor window in the ArduinoIDE with a 2MB serial port baud rate, and "carriage return" when pressing enter. Follow the on-screen prompts and type your responses (should only be a single number) followed by the return key until all of the baud rates are set. Now place the "NO BOOT" jumper on and power cycle (unplug USB, plug back in). See below, 2,2,2,2 results in both ports set for 500k/2MB CANFD. This does enable FD rates beyond 2MB.
-![Image](https://togglebit.net/wp-content/uploads/2024/02/image.png)
+![Image](savvycanconfig.png)
 
 **Step 4.** - Download our forked version of [SavvyCAN](https://github.com/togglebit/SavvyCAN) from GitHub (Windows supported only right now). The entire codebase can be downloaded, with the windows executable located in the "**release**" folder. Additionally, you can watch [Youtube videos](https://www.youtube.com/watch?v=kdA5Gdf3FAk) on how to use SavvyCAN.
 
