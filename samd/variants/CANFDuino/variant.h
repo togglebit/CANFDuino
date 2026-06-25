@@ -256,10 +256,21 @@ static const uint8_t ATN = PIN_ATN;
 
 
 // Serial3 
+
+#ifdef CANFDUINO_DIN
+
+#define PIN_SERIAL3_TX       (22ul)
+#define PIN_SERIAL3_RX       (23ul)
+#define PAD_SERIAL3_TX       (UART_TX_PAD_0)
+#define PAD_SERIAL3_RX       (SERCOM_RX_PAD_1)
+
+#else
 #define PIN_SERIAL3_TX       (24ul)
 #define PIN_SERIAL3_RX       (25ul)
 #define PAD_SERIAL3_TX       (UART_TX_PAD_2)
 #define PAD_SERIAL3_RX       (SERCOM_RX_PAD_3)
+
+#endif
 
 #define SERCOM_INSTANCE_SERIAL3       &sercom3
 
