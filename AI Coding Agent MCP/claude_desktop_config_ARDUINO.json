@@ -1,0 +1,31 @@
+{
+  "mcpServers": {
+    "arduino-manager": {
+      "command": "python",
+      "args": [
+        "C:\\Users\\Admin\\AppData\\Local\\Programs\\Arduino IDE\\arduino_mcp.py"
+      ]
+    }
+
+  
+  },
+  "preferences": {
+    "coworkScheduledTasksEnabled": false,
+    "ccdScheduledTasksEnabled": false,
+    "coworkWebSearchEnabled": true,
+    "epitaxyPrefs": {
+      "starred-local-code-sessions": [],
+      "starred-cowork-spaces": [],
+      "starred-session-groups": [],
+      "dframe-local-slice": {
+        "pinnedOrder": [],
+        "customGroupAssignments": {},
+        "customGroupOrder": {}
+      }
+    },
+    "remoteToolsDeviceName": "desktop-3mmg927",
+    "bypassPermissionsGateByAccount": {
+      "14e2997d-4b68-40f5-bb29-3f83b10622af": false
+    }
+  }
+}
