@@ -274,3 +274,7 @@ These are the simple test functions for the serial interfaces that exist in the 
 ***CANFDuino_TimerTx.ino CANFDuino_Interrupt.ino***
 
 These are the simple test sketches for using a SAMC21 timer as a periodic callback for sending CAN messages (or doing other things) as well as a very simple bare-bones example of a digital input implemented as an external interrupt (note variant.cpp maps the external interrupts themselves to "Arduino" pins which must be referenced against the SAMC21 datasheet for pin mapping).
+
+## AI Coding 
+
+There are two sample for MCP scripts and the JSON configuration files for Claude desktop to act as an agent to write code and program the Arduino. We have written a post about this as well. At this point, you can use AI to setup AI for coding. An AI IDE enabled would likely enable this as well.
